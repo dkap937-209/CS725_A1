@@ -3,6 +3,7 @@ import util.Keyboard;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class Client {
@@ -12,16 +13,17 @@ public class Client {
             DataInputStream in = new DataInputStream(socket.getInputStream());
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
-            //Idea maybe: It takes keyboard input, and we send it to the server where it does operations accordingly
-//            Keyboard.prompt("Enter a command: ");
 
-            System.out.println("Enter a command");
             while(true){
-                if(Keyboard.readInput() != null){
-                    //Do stuff
-
-                    System.out.println("Enter a command");
+                // Send command to Server
+                System.out.println("Enter a command");
+                String input = Keyboard.readInput();
+                while(input == null){
+                    input = Keyboard.readInput();
                 }
+                int inputLength = input.length();
+                out.writeInt(inputLength);
+                out.writeChars(input);
             }
         }
         catch (IOException e){
