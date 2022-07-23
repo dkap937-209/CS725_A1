@@ -17,7 +17,6 @@ public class Client {
 
 //            String greeting = ReadChars.readStringIn(in);
 //            System.out.println("Greeting: "+greeting);
-            //TODO: Need to convert it to bytes
             while(true){
                 // Send command to Server
                 System.out.println("Enter a command");
@@ -29,15 +28,9 @@ public class Client {
                 out.writeInt(inputLength);
                 out.writeChars(input);
 
-//                System.out.println("Receving res from server");
-//                //Receiving response from Server
-////                response = ReadChars.readStringIn(in);
-//                StringBuilder builder = new StringBuilder();
-////                inputLength = in.readInt();
-//                for(int i=0; i<14; i++){
-//                    builder.append(in.readChar());
-//                }
-//                System.out.println(builder);
+                //Receiving response from Server
+                response = ReadChars.readStringIn(in);
+                System.out.println(response);
 
             }
         }
