@@ -247,6 +247,11 @@ public class Server {
                         clientConnection.close();
                         break;
                     }
+                    else{
+                        res = "ERROR: Invalid Command\n" +
+                                "Available Commands: \"USER\", \"ACCT\", \"PASS\", \"TYPE\", \"LIST\", \"CDIR\", \"KILL\", \"NAME\", \"TOBE\", \"DONE\", \"RETR\", \"SEND\", \"STOP\", \"STOR\", \"SIZE\"";
+                        sendMessageToClient(res, out);
+                    }
 
 
 
