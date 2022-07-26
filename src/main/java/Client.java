@@ -19,7 +19,7 @@ public class Client {
 //            System.out.println("Greeting: "+greeting);
             while(true){
                 // Send command to Server
-                System.out.println("Enter a command");
+                System.out.print(">");
                 String input = Keyboard.readInput();
                 while(input == null){
                     input = Keyboard.readInput();
@@ -27,7 +27,7 @@ public class Client {
                 int inputLength = input.length();
                 out.writeInt(inputLength);
                 out.writeChars(input);
-
+                out.flush();
                 //Receiving response from Server
                 response = ReadChars.readStringIn(in);
                 System.out.println(response);
