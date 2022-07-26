@@ -32,6 +32,10 @@ public class Client {
                 response = ReadChars.readStringIn(in);
                 System.out.println(response);
 
+                if(input.equals("DONE")){
+                    break;
+                }
+
             }
         }
         catch (IOException e){
