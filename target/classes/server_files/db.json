@@ -1,0 +1,58 @@
+[
+  {
+    "userIDs": [
+      {
+        "username": "user1",
+        "password": "",
+        "accts": []
+      },
+      {
+        "username": "user2",
+        "password": "",
+        "accts": ["acct1"]
+      },
+      {
+        "username": "user3",
+        "password": "pass3",
+        "accts": []
+      },
+      {
+        "username": "user4",
+        "password": "pass4",
+        "accts": ["acct1"]
+      },
+      {
+        "username": "user5",
+        "password": "pass5",
+        "accts": ["acct1", "acct2", "acct3"]
+      },
+      {
+        "username": "user6",
+        "password": "pass6",
+        "accts": ["acct1", "acct2", "acct3", "acct4"]
+      }
+    ]
+  },
+  {
+    "accounts": [
+      {
+        "accountName": "acct1",
+        "users": ["user2", "user4", "user5", "user6"]
+      },
+      {
+        "accountName": "acct2",
+        "users": ["user5", "user6"]
+      },
+      {
+        "accountName": "acct3",
+        "users": ["user5", "user6"]
+      },
+      {
+        "accountName": "acct4",
+        "users": ["user6"]
+      }
+    ]
+  }
+]
+
+

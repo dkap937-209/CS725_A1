@@ -42,7 +42,7 @@ public class ClientThread extends Thread {
             //Reading the input sent from the client
             String str = ReadChars.readStringIn(in);
             JSONParser parser = new JSONParser();
-            String res;
+            String res = "";
 
             String cmd = str.substring(0, 4);
             cmd = cmd.toUpperCase();
@@ -84,14 +84,12 @@ public class ClientThread extends Thread {
                                 else{
                                     res ="+User-id valid, send account and password";
                                 }
-                                sendMessageToClient(res, out);
                                 break;
                             }
                         }
 
                         if(!found){
                             res = "-Invalid user-id, try again";
-                            sendMessageToClient(res, out);
                         }
                     } catch (ParseException | IOException e) {
                         throw new RuntimeException(e);
@@ -105,10 +103,12 @@ public class ClientThread extends Thread {
 
                     //TODO: need it to account for when a user command has been used previously
 //                    if(usersAccounts != null){
+//                        boolean found = false;
 //                        for(Object o: usersAccounts){
 //                            String acctNane= o.toString();
 //                            if(acctNane.equals(accountName)){
-//
+//                                found = true;
+//                                res =
 //                            }
 //                        }
 //
@@ -136,13 +136,11 @@ public class ClientThread extends Thread {
                                     loggedIn = true;
                                     selectedAccount = (String) object.get("accountName");
                                     res = "! Account valid, logged-in";
-                                    sendMessageToClient(res, out);
                                 }
                                 else{
 
                                     selectedAccount = (String) object.get("accountName");
                                     res = "+Account valid, send password";
-                                    sendMessageToClient(res, out);
                                 }
 
                                 break;
@@ -170,7 +168,6 @@ public class ClientThread extends Thread {
                             res = "! Logged in";
                         }
 
-                        sendMessageToClient(res, out);
                     }
 
                     else if(password == null){
@@ -183,20 +180,17 @@ public class ClientThread extends Thread {
 
                             for(Object o: list){
                                 JSONObject object = (JSONObject) o;
-                                //TODO: need to handle it when the user has accounts
                                 if(object.get("password").equals(pass)){
                                     found = true;
                                     passEntered = true;
                                     password = (String) object.get("password");
                                     res = "+Send Account";
-                                    sendMessageToClient(res, out);
                                     break;
                                 }
                             }
 
                             if(!found){
                                 res = "-Invalid user-id, try again";
-                                sendMessageToClient(res, out);
                             }
                         } catch (ParseException | IOException e) {
                             throw new RuntimeException(e);
@@ -205,7 +199,6 @@ public class ClientThread extends Thread {
                     else{
                         //Password is wrong
                         res = "-Wrong password, try again";
-                        sendMessageToClient(res, out);
                     }
 
                 }
@@ -219,8 +212,9 @@ public class ClientThread extends Thread {
             else{
                 res = "ERROR: Invalid Command\n" +
                         "Available Commands: \"USER\", \"ACCT\", \"PASS\", \"TYPE\", \"LIST\", \"CDIR\", \"KILL\", \"NAME\", \"TOBE\", \"DONE\", \"RETR\", \"SEND\", \"STOP\", \"STOR\", \"SIZE\"";
-                sendMessageToClient(res, out);
             }
+
+            sendMessageToClient(res, out);
 
 
 
@@ -238,4 +232,5 @@ public class ClientThread extends Thread {
         } catch (IOException ignored) {
         }
     }
+
 }
