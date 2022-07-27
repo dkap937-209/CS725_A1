@@ -15,6 +15,7 @@ public class Client {
             DataInputStream in = new DataInputStream(socket.getInputStream());
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
+            //TODO: receive greeting from server
 //            String greeting = ReadChars.readStringIn(in);
 //            System.out.println("Greeting: "+greeting);
             while(true){

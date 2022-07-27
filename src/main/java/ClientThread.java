@@ -54,46 +54,54 @@ public class ClientThread extends Thread {
 
                     String userID =  str.substring(5);
 
-                    //Looping through db.json to find the user
-                    try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
-
-                        //Retrieving value for userID key in json file
-                        Object obj = parser.parse(reader);
-                        JSONArray list = (JSONArray) obj;
-                        JSONObject ids = (JSONObject) list.get(0);
-                        list = (JSONArray) ids.get("userIDs");
-                        boolean found = false;
-
-                        //Looping through all objects in list to find the one that matches the input
-                        for(Object o: list){
-                            JSONObject object = (JSONObject) o;
-
-                            if(object.get("username").equals(userID)){
-                                found = true;
-                                userEntered = true;
-                                user = userID;
-                                password = (String) object.get("password");
-                                usersAccounts = (JSONArray) object.get("accts");
-                                numAccounts = usersAccounts.size();
-
-                                //Account has no password
-                                if(object.get("password").equals("") && usersAccounts.size() == 0){
-                                    res = String.format("!%s logged in", userID);
-                                    loggedIn = true;
-                                }
-                                else{
-                                    res ="+User-id valid, send account and password";
-                                }
-                                break;
-                            }
-                        }
-
-                        if(!found){
-                            res = "-Invalid user-id, try again";
-                        }
-                    } catch (ParseException | IOException e) {
-                        throw new RuntimeException(e);
+                    if(isValidInput(userID)){
+                        res = "ERROR: Invalid Arguments\n" +
+                                "Usage: USER user-id";
                     }
+                    else{
+                        try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
+
+                            //Retrieving value for userID key in json file
+                            Object obj = parser.parse(reader);
+                            JSONArray list = (JSONArray) obj;
+                            JSONObject ids = (JSONObject) list.get(0);
+                            list = (JSONArray) ids.get("userIDs");
+                            boolean found = false;
+
+                            //Looping through all objects in list to find the one that matches the input
+                            for(Object o: list){
+                                JSONObject object = (JSONObject) o;
+
+                                if(object.get("username").equals(userID)){
+                                    found = true;
+                                    userEntered = true;
+                                    user = userID;
+                                    password = (String) object.get("password");
+                                    usersAccounts = (JSONArray) object.get("accts");
+                                    numAccounts = usersAccounts.size();
+
+                                    //Account has no password
+                                    if(object.get("password").equals("") && usersAccounts.size() == 0){
+                                        res = String.format("!%s logged in", userID);
+                                        loggedIn = true;
+                                    }
+                                    else{
+                                        res ="+User-id valid, send account and password";
+                                    }
+                                    break;
+                                }
+                            }
+
+                            if(!found){
+                                res = "-Invalid user-id, try again";
+                            }
+                        } catch (ParseException | IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    //Looping through db.json to find the user
+
                 }
             }
 
@@ -101,107 +109,83 @@ public class ClientThread extends Thread {
                 if(str.length() > 4){
                     String accountName =  str.substring(5);
 
-                    //TODO: need it to account for when a user command has been used previously
-                    if(usersAccounts != null){
-                        boolean found = false;
-                        for(Object o: usersAccounts){
-                            String acctName= o.toString();
-                            if(acctName.equals(accountName)){
-                                found = true;
-                                selectedAccount = acctName;
-                                System.out.println("Pass word is : "+ password);
-                                res = passEntered ? "! Account valid, logged-in" : "+Account valid, send password";
-                                assert password != null;
-                                if(password.equals("")){
-                                    res = "!Account valid, logged-in";
-                                }
-                                break;
-                            }
-                        }
-
-                        if(!found){
-                            System.out.println("Account is invalid");
-                            res = "-Invalid account, try again";
-                        }
-
+                    if(isValidInput(accountName)){
+                        res = "ERROR: Invalid Arguments\n" +
+                                "Usage: ACCT account";
                     }
-                    //No user has been specified
                     else{
-                        //Move other code into here, would need to modify is slightly since some it gets
-                        // taken care in the previous part
-
-                        try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
-                            Object obj = parser.parse(reader);
-                            JSONArray list = (JSONArray) obj;
-                            JSONObject ids = (JSONObject) list.get(1);
-                            list = (JSONArray) ids.get("accounts");
+                        if(usersAccounts != null){
                             boolean found = false;
-
-
-                            for(Object o: list){
-                                JSONObject object = (JSONObject) o;
-                                JSONArray acctUsers = (JSONArray) object.get("users");
-
-                                if(object.get("accountName").equals(accountName)){
+                            for(Object o: usersAccounts){
+                                String acctName= o.toString();
+                                if(acctName.equals(accountName)){
                                     found = true;
-                                    res = "+This message";
-
+                                    selectedAccount = acctName;
+                                    System.out.println("Pass word is : "+ password);
+                                    res = passEntered ? "! Account valid, logged-in" : "+Account valid, send password";
+                                    assert password != null;
+                                    if(password.equals("")){
+                                        res = "!Account valid, logged-in";
+                                    }
                                     break;
                                 }
                             }
 
                             if(!found){
+                                System.out.println("Account is invalid");
                                 res = "-Invalid account, try again";
                             }
 
-                        } catch (ParseException | IOException e) {
-                            throw new RuntimeException(e);
                         }
+                        //No user has been specified
+                        else{
+                            //Move other code into here, would need to modify is slightly since some it gets
+                            // taken care in the previous part
+
+                            try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
+                                Object obj = parser.parse(reader);
+                                JSONArray list = (JSONArray) obj;
+                                JSONObject ids = (JSONObject) list.get(1);
+                                list = (JSONArray) ids.get("accounts");
+                                boolean found = false;
 
 
+                                for(Object o: list){
+                                    JSONObject object = (JSONObject) o;
+                                    JSONArray acctUsers = (JSONArray) object.get("users");
+
+                                    if(object.get("accountName").equals(accountName)){
+                                        found = true;
+                                        res = "+This message";
+
+                                        break;
+                                    }
+                                }
+
+                                if(!found){
+                                    res = "-Invalid account, try again";
+                                }
+
+                            } catch (ParseException | IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+
+                        }
                     }
-
-                    //TODO: make a function that can look through db that takes an argument of the field
-//                    //For users if they have no pass but an account different msg, also add accounts to user
-//                    try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
-//                        Object obj = parser.parse(reader);
-//                        JSONArray list = (JSONArray) obj;
-//                        JSONObject ids = (JSONObject) list.get(1);
-//                        list = (JSONArray) ids.get("accounts");
-//                        boolean found = false;
-//
-//
-//                        for(Object o: list){
-//                            JSONObject object = (JSONObject) o;
-//                            JSONArray acctUsers = (JSONArray) object.get("users");
-//                            if(object.get("accountName").equals(accountName)){
-//                                found = true;
-//                                if(acctUsers.contains(user) && ((userEntered && (passEntered||password.equals(""))) || loggedIn)){
-//                                    loggedIn = true;
-//                                    selectedAccount = (String) object.get("accountName");
-//                                    res = "! Account valid, logged-in";
-//                                }
-//                                else{
-//
-//                                    selectedAccount = (String) object.get("accountName");
-//                                    res = "+Account valid, send password";
-//                                }
-//
-//                                break;
-//                            }
-//                        }
-//
-//                    } catch (ParseException | IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
 
                 }
             }
             else if (cmd.startsWith("PASS")){
 
                 if(str.length() > 4){
+
                     String pass =  str.substring(5);
-                    if(pass.equals(password)){
+                    if(isValidInput(pass)){
+                        res = "ERROR: Invalid Arguments\n" +
+                                "Usage: PASS password";
+                    }
+                    else if(pass.equals(password)){
 
                         passEntered = true;
                         if(numAccounts != 0 && selectedAccount == null){
@@ -275,6 +259,11 @@ public class ClientThread extends Thread {
             out.flush();
         } catch (IOException ignored) {
         }
+    }
+
+    public static boolean isValidInput(String input){
+        System.out.println("Input: "+input);
+        return input.split(" ").length > 1;
     }
 
 }
