@@ -32,6 +32,7 @@ public class ClientThread extends Thread {
         boolean loggedIn = false;
         JSONArray usersAccounts = null;
         String selectedAccount = null;
+        int numAccounts = Integer.MIN_VALUE;
         while(true){
             //Reading the input sent from the client
             String str = ReadChars.readStringIn(in);
@@ -48,14 +49,17 @@ public class ClientThread extends Thread {
 
                     String userID =  str.substring(5);
 
+                    //Looping through db.json to find the user
                     try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
+
+                        //Retrieving value for userID key in json file
                         Object obj = parser.parse(reader);
                         JSONArray list = (JSONArray) obj;
                         JSONObject ids = (JSONObject) list.get(0);
                         list = (JSONArray) ids.get("userIDs");
                         boolean found = false;
 
-
+                        //Looping through all objects in list to find the one that matches the input
                         for(Object o: list){
                             JSONObject object = (JSONObject) o;
 
@@ -64,7 +68,7 @@ public class ClientThread extends Thread {
                                 user = userID;
                                 password = (String) object.get("password");
                                 usersAccounts = (JSONArray) object.get("accts");
-
+                                numAccounts = usersAccounts.size();
 
                                 //Account has no password
                                 if(object.get("password").equals("") && usersAccounts.size() == 0){
@@ -94,12 +98,18 @@ public class ClientThread extends Thread {
                     String accountName =  str.substring(5);
 
                     //TODO: need it to account for when a user command has been used previously
-                    if(usersAccounts != null){
-
-                    }
-                    else{
-
-                    }
+//                    if(usersAccounts != null){
+//                        for(Object o: usersAccounts){
+//                            String acctNane= o.toString();
+//                            if(acctNane.equals(accountName)){
+//
+//                            }
+//                        }
+//
+//                    }
+//                    else{
+//                        //Move other code into here
+//                    }
 
                     //TODO: make a function that can look through db that takes an argument of the field
                     //For users if they have no pass but an account different msg, also add accounts to user
@@ -116,7 +126,7 @@ public class ClientThread extends Thread {
                             JSONArray acctUsers = (JSONArray) object.get("users");
                             if(object.get("accountName").equals(accountName)){
                                 found = true;
-                                if(acctUsers.contains(user) && user != null && password != null){
+                                if(acctUsers.contains(user) && ((user != null && password != null) && loggedIn)){
                                     loggedIn = true;
                                     res = "! Account valid, logged-in";
                                     sendMessageToClient(res, out);
@@ -142,7 +152,7 @@ public class ClientThread extends Thread {
                     String pass =  str.substring(5);
                     if(pass.equals(password)){
 
-                        if(selectedAccount == null){
+                        if(selectedAccount == null && numAccounts == Integer.MIN_VALUE){
                             res = "+Send account";
                         }else{
                             loggedIn = true;

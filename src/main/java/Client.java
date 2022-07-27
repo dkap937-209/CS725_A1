@@ -33,7 +33,7 @@ public class Client {
                 response = ReadChars.readStringIn(in);
                 System.out.println(response);
 
-                if(input.equals("DONE")){
+                if(input.toUpperCase().equals("DONE")){
                     break;
                 }
             }
