@@ -28,6 +28,7 @@ public class Client {
                 out.writeInt(inputLength);
                 out.writeChars(input);
                 out.flush();
+
                 //Receiving response from Server
                 response = ReadChars.readStringIn(in);
                 System.out.println(response);
@@ -35,7 +36,6 @@ public class Client {
                 if(input.equals("DONE")){
                     break;
                 }
-
             }
         }
         catch (IOException e){

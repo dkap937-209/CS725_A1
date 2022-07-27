@@ -7,7 +7,7 @@ import util.ReadChars;
 import java.io.*;
 import java.net.Socket;
 
-public class ClientThread extends Thread{
+public class ClientThread extends Thread {
     protected Socket socket;
 
     public ClientThread(Socket clientSocket) {
@@ -19,11 +19,9 @@ public class ClientThread extends Thread{
     @Override
     public synchronized void start(){
         DataInputStream in = null;
-        BufferedReader brinp = null;
         DataOutputStream out = null;
         try {
             in = new DataInputStream(socket.getInputStream());
-            brinp = new BufferedReader(new InputStreamReader(in));
             out = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             return;
@@ -31,7 +29,8 @@ public class ClientThread extends Thread{
 
         String user = null;
         String password = null;
-        String account = null;
+        boolean loggedIn = false;
+        JSONArray usersAccounts = null;
         while(true){
             //Reading the input sent from the client
             String str = ReadChars.readStringIn(in);
@@ -42,7 +41,6 @@ public class ClientThread extends Thread{
 
             /** User Command **/
             if(str.startsWith("USER")){
-                System.out.println("Perform User command");
 
                 if(str.length() > 4){
 
@@ -51,6 +49,8 @@ public class ClientThread extends Thread{
                     try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
                         Object obj = parser.parse(reader);
                         JSONArray list = (JSONArray) obj;
+                        JSONObject ids = (JSONObject) list.get(0);
+                        list = (JSONArray) ids.get("userIDs");
                         boolean found = false;
 
 
@@ -61,10 +61,13 @@ public class ClientThread extends Thread{
                                 found = true;
                                 user = userID;
                                 password = (String) object.get("password");
+                                usersAccounts = (JSONArray) object.get("accts");
+
 
                                 //Account has no password
-                                if(object.get("password").equals("")){
+                                if(object.get("password").equals("") && usersAccounts.size() == 0){
                                     res = String.format("!%s logged in", userID);
+                                    loggedIn = true;
                                 }
                                 else{
                                     res ="+User-id valid, send account and password";
@@ -85,15 +88,57 @@ public class ClientThread extends Thread{
             }
 
             else if(str.startsWith("ACCT")){
-                System.out.println("Perform account command");
+                if(str.length() > 4){
+                    String accountName =  str.substring(5);
+
+                    //TODO: need it to account for when a user command has been used previously
+                    if(usersAccounts != null){
+
+                    }
+                    else{
+
+                    }
+
+                    //TODO: make a function that can look through db that takes an argument of the field
+                    //For users if they have no pass but an account different msg, also add accounts to user
+                    try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
+                        Object obj = parser.parse(reader);
+                        JSONArray list = (JSONArray) obj;
+                        JSONObject ids = (JSONObject) list.get(1);
+                        list = (JSONArray) ids.get("accounts");
+                        boolean found = false;
+
+
+                        for(Object o: list){
+                            JSONObject object = (JSONObject) o;
+                            JSONArray acctUsers = (JSONArray) object.get("users");
+                            if(object.get("accountName").equals(accountName)){
+                                found = true;
+                                if(acctUsers.contains(user) && loggedIn){
+                                    res = "! Account valid, logged-in";
+                                    sendMessageToClient(res, out);
+                                }
+                                else{
+                                    res = "+Account valid, send password";
+                                    sendMessageToClient(res, out);
+                                }
+
+                                break;
+                            }
+                        }
+
+                    } catch (ParseException | IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
             }
             else if (str.startsWith("PASS")){
-                System.out.println("Perform password command");
 
                 if(str.length() > 4){
                     String pass =  str.substring(5);
-
-                    if(pass.equals(password)){
+                    if(pass.equals(password) && usersAccounts != null){
+                        loggedIn = true;
                         res = "! Logged in";
                         sendMessageToClient(res, out);
                     }
@@ -108,7 +153,7 @@ public class ClientThread extends Thread{
 
                             for(Object o: list){
                                 JSONObject object = (JSONObject) o;
-
+                                //TODO: need to handle it when the user has accounts
                                 if(object.get("password").equals(pass)){
                                     found = true;
                                     password = (String) object.get("password");

@@ -125,19 +125,19 @@ import java.net.SocketException;
 public class Server {
     public static void main(String[] args) {
 
-        try (ServerSocket socket = new ServerSocket(Connection_Information.PORT_NUMBER)) {
-            InetAddress serverHost = InetAddress.getLocalHost();
-            System.out.println("Server destination: " + serverHost.getHostAddress() + ":" + socket.getLocalPort());
+        while (true) {
+            try (ServerSocket socket = new ServerSocket(Connection_Information.PORT_NUMBER)) {
+                InetAddress serverHost = InetAddress.getLocalHost();
+                System.out.println("Server destination: " + serverHost.getHostAddress() + ":" + socket.getLocalPort());
 
 
-            while (true) {
+//            while (true) {
                 try (Socket clientConnection = socket.accept()) {
                     new ClientThread(clientConnection).start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-            }
+//            }
 //            try(Socket clientConnection = socket.accept()){
 //
 //                DataInputStream in = new DataInputStream(clientConnection.getInputStream());
@@ -274,11 +274,11 @@ public class Server {
 //            e.printStackTrace();
 //        }
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
-
 
     public static void sendMessageToClient(String res, DataOutputStream out){
         try{
