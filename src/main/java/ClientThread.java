@@ -31,16 +31,18 @@ public class ClientThread extends Thread {
         String password = null;
         boolean loggedIn = false;
         JSONArray usersAccounts = null;
+        String selectedAccount = null;
         while(true){
             //Reading the input sent from the client
             String str = ReadChars.readStringIn(in);
             JSONParser parser = new JSONParser();
             String res;
 
-
+            String cmd = str.substring(0, 4);
+            cmd = cmd.toUpperCase();
 
             /** User Command **/
-            if(str.startsWith("USER")){
+            if(cmd.startsWith("USER")){
 
                 if(str.length() > 4){
 
@@ -87,7 +89,7 @@ public class ClientThread extends Thread {
                 }
             }
 
-            else if(str.startsWith("ACCT")){
+            else if(cmd.startsWith("ACCT")){
                 if(str.length() > 4){
                     String accountName =  str.substring(5);
 
@@ -114,7 +116,8 @@ public class ClientThread extends Thread {
                             JSONArray acctUsers = (JSONArray) object.get("users");
                             if(object.get("accountName").equals(accountName)){
                                 found = true;
-                                if(acctUsers.contains(user) && loggedIn){
+                                if(acctUsers.contains(user) && user != null && password != null){
+                                    loggedIn = true;
                                     res = "! Account valid, logged-in";
                                     sendMessageToClient(res, out);
                                 }
@@ -133,13 +136,19 @@ public class ClientThread extends Thread {
 
                 }
             }
-            else if (str.startsWith("PASS")){
+            else if (cmd.startsWith("PASS")){
 
                 if(str.length() > 4){
                     String pass =  str.substring(5);
-                    if(pass.equals(password) && usersAccounts != null){
-                        loggedIn = true;
-                        res = "! Logged in";
+                    if(pass.equals(password)){
+
+                        if(selectedAccount == null){
+                            res = "+Send account";
+                        }else{
+                            loggedIn = true;
+                            res = "! Logged in";
+                        }
+
                         sendMessageToClient(res, out);
                     }
 
@@ -180,8 +189,8 @@ public class ClientThread extends Thread {
                 }
             }
 
-            else if(str.startsWith("DONE")){
-                res = "+LOCALHOST-XX closing connection";
+            else if(cmd.startsWith("DONE")){
+                res = "Closing connection";
                 sendMessageToClient(res, out);
                 return;
             }
