@@ -32,7 +32,12 @@ public class ClientThread extends Thread {
         boolean loggedIn = false;
         JSONArray usersAccounts = null;
         String selectedAccount = null;
-        int numAccounts = Integer.MIN_VALUE;
+        int numAccounts = 0;
+
+        boolean userEntered = false;
+        boolean passEntered = false;
+
+
         while(true){
             //Reading the input sent from the client
             String str = ReadChars.readStringIn(in);
@@ -65,6 +70,7 @@ public class ClientThread extends Thread {
 
                             if(object.get("username").equals(userID)){
                                 found = true;
+                                userEntered = true;
                                 user = userID;
                                 password = (String) object.get("password");
                                 usersAccounts = (JSONArray) object.get("accts");
@@ -126,12 +132,15 @@ public class ClientThread extends Thread {
                             JSONArray acctUsers = (JSONArray) object.get("users");
                             if(object.get("accountName").equals(accountName)){
                                 found = true;
-                                if(acctUsers.contains(user) && ((user != null && password != null) && loggedIn)){
+                                if(acctUsers.contains(user) && ((userEntered && (passEntered||password.equals(""))) || loggedIn)){
                                     loggedIn = true;
+                                    selectedAccount = (String) object.get("accountName");
                                     res = "! Account valid, logged-in";
                                     sendMessageToClient(res, out);
                                 }
                                 else{
+
+                                    selectedAccount = (String) object.get("accountName");
                                     res = "+Account valid, send password";
                                     sendMessageToClient(res, out);
                                 }
@@ -152,9 +161,11 @@ public class ClientThread extends Thread {
                     String pass =  str.substring(5);
                     if(pass.equals(password)){
 
-                        if(selectedAccount == null && numAccounts == Integer.MIN_VALUE){
+                        passEntered = true;
+                        if(numAccounts != 0 && selectedAccount == null){
                             res = "+Send account";
-                        }else{
+                        }
+                        else{
                             loggedIn = true;
                             res = "! Logged in";
                         }
@@ -175,6 +186,7 @@ public class ClientThread extends Thread {
                                 //TODO: need to handle it when the user has accounts
                                 if(object.get("password").equals(pass)){
                                     found = true;
+                                    passEntered = true;
                                     password = (String) object.get("password");
                                     res = "+Send Account";
                                     sendMessageToClient(res, out);
