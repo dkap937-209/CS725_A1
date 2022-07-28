@@ -54,7 +54,7 @@ public class ClientThread extends Thread {
 
                     String userID =  str.substring(5);
 
-                    if(isValidInput(userID)){
+                    if(!isValidInput(userID)){
                         res = "ERROR: Invalid Arguments\n" +
                                 "Usage: USER user-id";
                     }
@@ -109,7 +109,7 @@ public class ClientThread extends Thread {
                 if(str.length() > 4){
                     String accountName =  str.substring(5);
 
-                    if(isValidInput(accountName)){
+                    if(!isValidInput(accountName)){
                         res = "ERROR: Invalid Arguments\n" +
                                 "Usage: ACCT account";
                     }
@@ -181,7 +181,7 @@ public class ClientThread extends Thread {
                 if(str.length() > 4){
 
                     String pass =  str.substring(5);
-                    if(isValidInput(pass)){
+                    if(!isValidInput(pass)){
                         res = "ERROR: Invalid Arguments\n" +
                                 "Usage: PASS password";
                     }
@@ -255,7 +255,7 @@ public class ClientThread extends Thread {
                             res = "+Using Continuous mode";
                             break;
                         default:
-                            if(!isValidInput(type)){
+                            if(isValidInput(type)){
                                 res = "-Type not valid";
 
                             }else{
@@ -291,8 +291,7 @@ public class ClientThread extends Thread {
     }
 
     public static boolean isValidInput(String input){
-        System.out.println("Input: "+input);
-        return input.split(" ").length > 1;
+        return !(input.split(" ").length > 1);
     }
 
 }
