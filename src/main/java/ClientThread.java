@@ -237,6 +237,35 @@ public class ClientThread extends Thread {
                 sendMessageToClient(res, out);
                 return;
             }
+            else if(cmd.startsWith("TYPE")){
+
+                if(str.length()>4){
+                    String type = str.substring(5);
+
+                    switch(type){
+                        case "a":
+                            res = "+Using Ascii mode";
+                            break;
+
+                        case "b":
+                            res = "+Using Binary mode";
+                            break;
+
+                        case "c":
+                            res = "+Using Continuous mode";
+                            break;
+                        default:
+                            if(!isValidInput(type)){
+                                res = "-Type not valid";
+
+                            }else{
+                                res = "ERROR: Invalid Arguments\n" +
+                                        "Usage: TYPE { A | B | C }";
+                            }
+
+                    }
+                }
+            }
             else{
                 res = "ERROR: Invalid Command\n" +
                         "Available Commands: \"USER\", \"ACCT\", \"PASS\", \"TYPE\", \"LIST\", \"CDIR\", \"KILL\", \"NAME\", \"TOBE\", \"DONE\", \"RETR\", \"SEND\", \"STOP\", \"STOR\", \"SIZE\"";
