@@ -134,8 +134,7 @@ public class Server {
 //            while (true) {
                 try (Socket clientConnection = socket.accept()) {
                     new ClientThread(clientConnection).start();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception ignored) {
                 }
 //            }
 //            try(Socket clientConnection = socket.accept()){

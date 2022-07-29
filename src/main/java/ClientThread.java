@@ -36,6 +36,8 @@ public class ClientThread extends Thread {
 
         boolean userEntered = false;
         boolean passEntered = false;
+        sendMessageToClient("Successfully connected to localhost on port 6789\n" +
+                "+RFC 913 SFTP Server", out);
 
 
         while(true){
