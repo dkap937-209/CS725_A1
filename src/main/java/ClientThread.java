@@ -93,6 +93,8 @@ public class ClientThread extends Thread {
                             }
 
                             if(!found){
+                                System.out.println("Id received: "+ userID);
+                                System.out.println(userID.length());
                                 res = "-Invalid user-id, try again";
                             }
                         } catch (ParseException | IOException e) {
@@ -233,9 +235,18 @@ public class ClientThread extends Thread {
             }
 
             else if(cmd.startsWith("DONE")){
-                res = "+Closing connection";
-                sendMessageToClient(res, out);
-                return;
+
+                if(isValidInput(str)){
+                    res = "+Closing connection";
+                    sendMessageToClient(res, out);
+                    return;
+                }
+                else{
+                    res = "ERROR: Invalid Arguments\n" +
+                            "Usage: DONE";
+
+                }
+
             }
             else if(cmd.startsWith("TYPE")){
 
