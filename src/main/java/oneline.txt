@@ -1,0 +1,1 @@
+Successfully connected to localhost on port 6789+RFC 913 SFTP Server>user user4+User-id valid, send account and password>acct acct1+Account valid, send password>pass pass4! Logged in>done+Closing connection

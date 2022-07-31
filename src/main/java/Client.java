@@ -15,13 +15,13 @@ public class Client {
             DataInputStream in = new DataInputStream(socket.getInputStream());
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
-            //TODO: receive greeting from server
             String greeting = ReadChars.readStringIn(in);
             System.out.println(greeting);
             while(true){
-                // Send command to Server
+                /* Send Command to the Server **/
                 System.out.print(">");
                 String input = Keyboard.readInput();
+                //Keep polling the input until we receive an input
                 while(input == null){
                     input = Keyboard.readInput();
                 }

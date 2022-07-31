@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.Socket;
 
 public class ClientThread extends Thread {
+//public class ClientThread implements Runnable {
     protected Socket socket;
 
     public ClientThread(Socket clientSocket) {
@@ -16,8 +17,9 @@ public class ClientThread extends Thread {
     }
 
 
-    @Override
+//    @Override
     public synchronized void start(){
+//    public void run(){
         DataInputStream in = null;
         DataOutputStream out = null;
         try {
@@ -125,7 +127,6 @@ public class ClientThread extends Thread {
                                 if(acctName.equals(accountName)){
                                     found = true;
                                     selectedAccount = acctName;
-                                    System.out.println("Pass word is : "+ password);
                                     res = passEntered ? "! Account valid, logged-in" : "+Account valid, send password";
                                     assert password != null;
                                     if(password.equals("")){
