@@ -6,6 +6,7 @@ import util.ReadChars;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
 
 public class ClientThread extends Thread {
 //public class ClientThread implements Runnable {
@@ -235,6 +236,34 @@ public class ClientThread extends Thread {
                     }
 
                 }
+            }
+
+            else if (cmd.startsWith("LIST")){
+
+                if(str.length() > 4){
+
+                    String mode = str.substring(5);
+                    if(mode.length() == 1){
+                        if(mode.equals("f")){
+                            System.out.println("F mode");
+                            String dirPath = String.format("src/main/resources/server_files/user_files/%s", user);
+                            File[] files = new File(dirPath).listFiles();
+                            res = String.format("+%s/\n", user);
+                            assert files != null;
+                            for(File file: files){
+                                res += file.getName()+"\n";
+                            }
+                        }
+                        else if(mode.equals("v")){
+
+                        }
+                    }
+                    else{
+                        System.out.println("Look for specific directory");
+                    }
+
+                }
+
             }
 
             else if(cmd.startsWith("DONE")){
