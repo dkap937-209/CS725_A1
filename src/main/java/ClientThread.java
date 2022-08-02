@@ -6,6 +6,8 @@ import util.ReadChars;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class ClientThread extends Thread {
 //public class ClientThread implements Runnable {
@@ -249,30 +251,34 @@ public class ClientThread extends Thread {
                     currDir += (mode.length()>1) ? String.format("%s/%s", user, mode.substring(2)) : user;
                     res = String.format("+%s/\n", currDir);
                     String dirPath = String.format("%s%s", BASE_DIR, currDir);
-                    File[] files = new File(dirPath).listFiles();
-                    StringBuilder resBuilder = new StringBuilder(res);
-//                    System.out.println("Specified dir: "+ dirPath);
 
-                    //Formatted directory listing
-                    if(mode.startsWith("f")){
-                        assert files != null;
-                        for(File file: files){
-                            resBuilder.append(file.getName()).append("\n");
+                    if(Files.exists(Path.of(dirPath))){
+                        File[] files = new File(dirPath).listFiles();
+                        StringBuilder resBuilder = new StringBuilder(res);
+
+                        //Formatted directory listing
+                        if(mode.startsWith("f")){
+                            assert files != null;
+                            for(File file: files){
+                                resBuilder.append(file.getName()).append("\n");
+                            }
                         }
-                    }
-                    //Verbose directory listing
-                    else if(mode.startsWith("v")){
-                        assert files != null;
-                        for(File file: files){
-                            String fileName = file.getName();
-                            Long fileSize = isAFolder(fileName) ? getFolderSize(dirPath+"/"+fileName) : file.length();
+                        //Verbose directory listing
+                        else if(mode.startsWith("v")){
+                            assert files != null;
+                            for(File file: files){
+                                String fileName = file.getName();
+                                Long fileSize = isAFolder(fileName) ? getFolderSize(dirPath+"/"+fileName) : file.length();
 //                            Long fileSize = file.length();
 
-                            resBuilder.append(String.format("Name: %s Path: %s/%s Size: %d\n", fileName,currDir,fileName, fileSize));
+                                resBuilder.append(String.format("Name: %s Path: %s/%s Size: %d\n", fileName,currDir,fileName, fileSize));
+                            }
                         }
+                        res = resBuilder.toString();
                     }
-                    res = resBuilder.toString();
-
+                    else{
+                        res = String.format("-Cant list directory because: %s does not exist", currDir);
+                    }
                 }
 
             }
