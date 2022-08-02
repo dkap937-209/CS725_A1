@@ -36,6 +36,8 @@ public class ClientThread extends Thread {
         JSONArray usersAccounts = null;
         String selectedAccount = null;
         int numAccounts = 0;
+        String currDir = "src/main/resources/server_files/user_files/";
+        final String BASE_DIR = "src/main/resources/server_files/user_files/";
 
         boolean userEntered = false;
         boolean passEntered = false;
@@ -131,6 +133,7 @@ public class ClientThread extends Thread {
                                     res = passEntered ? "! Account valid, logged-in" : "+Account valid, send password";
                                     assert password != null;
                                     if(password.equals("")){
+                                        loggedIn = true;
                                         res = "!Account valid, logged-in";
                                     }
                                     break;
@@ -243,24 +246,29 @@ public class ClientThread extends Thread {
                 if(str.length() > 4){
 
                     String mode = str.substring(5);
-                    if(mode.length() == 1){
-                        if(mode.equals("f")){
-                            System.out.println("F mode");
-                            String dirPath = String.format("src/main/resources/server_files/user_files/%s", user);
-                            File[] files = new File(dirPath).listFiles();
-                            res = String.format("+%s/\n", user);
-                            assert files != null;
-                            for(File file: files){
-                                res += file.getName()+"\n";
-                            }
-                        }
-                        else if(mode.equals("v")){
 
+                    //Formatted directory listing
+                    System.out.println("Length of mode: "+ mode.length());
+                    System.out.println(mode);
+                    currDir += (mode.length()>1) ? mode.substring(2)+"/" :"";
+                    System.out.println("Current directory is: "+ currDir);
+
+                    if(mode.startsWith("f")){
+                        String dirPath = String.format("%s%s", currDir, user);
+                        File[] files = new File(dirPath).listFiles();
+                        res = String.format("+%s/\n", user);
+                        assert files != null;
+                        StringBuilder resBuilder = new StringBuilder(res);
+                        for(File file: files){
+                            resBuilder.append(file.getName()).append("\n");
                         }
+                        res = resBuilder.toString();
                     }
-                    else{
-                        System.out.println("Look for specific directory");
+                    //Verbose directory listing
+                    else if(mode.startsWith("v")){
+
                     }
+
 
                 }
 
