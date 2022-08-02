@@ -250,22 +250,27 @@ public class ClientThread extends Thread {
                     //Formatted directory listing
                     currDir = "";
                     currDir += (mode.length()>1) ? String.format("%s/%s", user, mode.substring(2)) : user;
+                    res = String.format("+%s/\n", currDir);
+                    String dirPath = String.format("%s%s", BASE_DIR, currDir);
+                    File[] files = new File(dirPath).listFiles();
+                    StringBuilder resBuilder = new StringBuilder(res);
 
                     if(mode.startsWith("f")){
-                        String dirPath = String.format("%s%s", BASE_DIR, currDir);
-                        File[] files = new File(dirPath).listFiles();
-                        res = String.format("+%s/\n", currDir);
                         assert files != null;
-                        StringBuilder resBuilder = new StringBuilder(res);
                         for(File file: files){
                             resBuilder.append(file.getName()).append("\n");
                         }
-                        res = resBuilder.toString();
                     }
                     //Verbose directory listing
                     else if(mode.startsWith("v")){
-
+                        assert files != null;
+                        for(File file: files){
+                            String fileName = file.getName();
+                            Long fileSize = file.length();
+                            resBuilder.append(String.format("Name: %s Path: %s/%s Size: %d\n", fileName,currDir,fileName, fileSize));
+                        }
                     }
+                    res = resBuilder.toString();
 
 
                 }
