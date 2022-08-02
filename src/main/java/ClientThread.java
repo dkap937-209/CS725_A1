@@ -6,11 +6,11 @@ import util.ReadChars;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
 
 public class ClientThread extends Thread {
 //public class ClientThread implements Runnable {
     protected Socket socket;
+    private final String BASE_DIR = "src/main/resources/server_files/user_files/";
 
     public ClientThread(Socket clientSocket) {
         System.out.println("New client thread made");
@@ -18,9 +18,7 @@ public class ClientThread extends Thread {
     }
 
 
-//    @Override
     public synchronized void start(){
-//    public void run(){
         DataInputStream in = null;
         DataOutputStream out = null;
         try {
@@ -37,7 +35,6 @@ public class ClientThread extends Thread {
         String selectedAccount = null;
         int numAccounts = 0;
         String currDir = "src/main/resources/server_files/user_files/";
-        final String BASE_DIR = "src/main/resources/server_files/user_files/";
 
         boolean userEntered = false;
         boolean passEntered = false;
@@ -247,14 +244,16 @@ public class ClientThread extends Thread {
 
                     String mode = str.substring(5);
 
-                    //Formatted directory listing
+                    //Creating directory string
                     currDir = "";
                     currDir += (mode.length()>1) ? String.format("%s/%s", user, mode.substring(2)) : user;
                     res = String.format("+%s/\n", currDir);
                     String dirPath = String.format("%s%s", BASE_DIR, currDir);
                     File[] files = new File(dirPath).listFiles();
                     StringBuilder resBuilder = new StringBuilder(res);
+//                    System.out.println("Specified dir: "+ dirPath);
 
+                    //Formatted directory listing
                     if(mode.startsWith("f")){
                         assert files != null;
                         for(File file: files){
@@ -266,12 +265,13 @@ public class ClientThread extends Thread {
                         assert files != null;
                         for(File file: files){
                             String fileName = file.getName();
-                            Long fileSize = file.length();
+                            Long fileSize = isAFolder(fileName) ? getFolderSize(dirPath+"/"+fileName) : file.length();
+//                            Long fileSize = file.length();
+
                             resBuilder.append(String.format("Name: %s Path: %s/%s Size: %d\n", fileName,currDir,fileName, fileSize));
                         }
                     }
                     res = resBuilder.toString();
-
 
                 }
 
@@ -334,6 +334,25 @@ public class ClientThread extends Thread {
 
     }
 
+    private Long getFolderSize(String path) {
+        long size = 0L;
+        File[] files = new File(path).listFiles();
+        System.out.println("Path is "+path);
+        if (files != null) {
+            System.out.println("There are files");
+            for(File f: files){
+                size+=f.length();
+            }
+        }
+        System.out.println("Value of size: "+ size);
+        return size;
+    }
+
+    /**
+     * Send a message to the client
+     * @param res Response to be sent to the client
+     * @param out {@link DataOutputStream} object to send response through
+     */
     public static void sendMessageToClient(String res, DataOutputStream out){
         try{
             int resLength = res.length();
@@ -344,8 +363,18 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Check that the input is valid for a command by checking two parameters were not provided.
+     *
+     * @param input {@link String} object to check
+     * @return {@link Boolean} if the input is valid or not
+     */
     public static boolean isValidInput(String input){
         return !(input.split(" ").length > 1);
+    }
+
+    public static boolean isAFolder(String fileName){
+        return !fileName.contains(".");
     }
 
 }
