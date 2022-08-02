@@ -248,15 +248,13 @@ public class ClientThread extends Thread {
                     String mode = str.substring(5);
 
                     //Formatted directory listing
-                    System.out.println("Length of mode: "+ mode.length());
-                    System.out.println(mode);
-                    currDir += (mode.length()>1) ? mode.substring(2)+"/" :"";
-                    System.out.println("Current directory is: "+ currDir);
+                    currDir = "";
+                    currDir += (mode.length()>1) ? String.format("%s/%s", user, mode.substring(2)) : user;
 
                     if(mode.startsWith("f")){
-                        String dirPath = String.format("%s%s", currDir, user);
+                        String dirPath = String.format("%s%s", BASE_DIR, currDir);
                         File[] files = new File(dirPath).listFiles();
-                        res = String.format("+%s/\n", user);
+                        res = String.format("+%s/\n", currDir);
                         assert files != null;
                         StringBuilder resBuilder = new StringBuilder(res);
                         for(File file: files){
