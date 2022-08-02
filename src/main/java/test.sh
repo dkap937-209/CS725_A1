@@ -124,7 +124,7 @@ echo "Test 17" >> results.txt
 echo "">> results.txt
 
 echo "Test 18" >> results.txt
-{ echo "user user1";  echo "list f license.txt"; echo "done";} | java Client >> results.txt
+{ echo "user user1";  echo "list f user1.txt"; echo "done";} | java Client >> results.txt
 echo "">> results.txt
 
 echo "Test 19" >> results.txt
