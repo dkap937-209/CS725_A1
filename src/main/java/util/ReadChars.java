@@ -1,12 +1,14 @@
 package util;
 
 import java.io.DataInputStream;
-import java.util.Arrays;
 
 /**
  * Class to read a string from a {@link DataInputStream}
  */
 public class ReadChars {
+
+    public static void main(String[] args) {
+    }
 
     public static String readStringIn(DataInputStream in){
         try{
