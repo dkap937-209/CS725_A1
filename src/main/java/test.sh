@@ -7,68 +7,20 @@ javac -cp . client/Client.java
 
 echo "Test 1" > results.txt
 { echo "user user1"; echo "done"; } | java client/Client.java >> results.txt
-tail -6 results.txt > lines.txt
-cat lines.txt | tr -d '\r\n' > oneline.txt
-
-while IFS="" read -r p || [ -n "$p" ]
-do
-  if [ "$p" = "Successfully connected to localhost on port 6789+RFC 913 SFTP Server>user user1!user1 logged in>done+Closing connection" ]
-  then
-    echo "✓✓✓✓✓✓✓✓✓✓✓Passing✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓">> results.txt
-  else
-    echo "✖✖✖✖✖✖✖✖✖✖Failing✖✖✖✖✖✖✖✖✖✖">> results.txt
-  fi
-done < oneline.txt
 echo "">> results.txt
 
 
 
 echo "Test 2" >> results.txt
 { echo "user user2"; echo "acct acct1"; echo "done";} | java client/Client.java >> results.txt
-tail -8 results.txt > lines.txt
-cat lines.txt | tr -d '\r\n' > oneline.txt
-
-while IFS="" read -r p || [ -n "$p" ]
-do
-  if [ "$p" = "Successfully connected to localhost on port 6789+RFC 913 SFTP Server>user user2+User-id valid, send account and password>acct acct1!Account valid, logged-in>done+Closing connection" ]
-  then
-    echo "✓✓✓✓✓✓✓✓✓✓✓Passing✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓">> results.txt
-  else
-    echo "✖✖✖✖✖✖✖✖✖✖Failing✖✖✖✖✖✖✖✖✖✖">> results.txt
-  fi
-done < oneline.txt
 echo "">> results.txt
 
 echo "Test 3" >> results.txt
 { echo "user user3"; echo "pass pass3"; echo "done";} | java client/Client.java >> results.txt
-tail -8 results.txt > lines.txt
-cat lines.txt | tr -d '\r\n' > oneline.txt
-
-while IFS="" read -r p || [ -n "$p" ]
-do
-  if [ "$p" = "Successfully connected to localhost on port 6789 +RFC 913 SFTP Server > user user3 +User-id valid, send account and password > pass pass3 !Logged in >done +Closing connection" ]
-  then
-    echo "✓✓✓✓✓✓✓✓✓✓✓Passing✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓">> results.txt
-  else
-    echo "✖✖✖✖✖✖✖✖✖✖Failing✖✖✖✖✖✖✖✖✖✖">> results.txt
-  fi
-done < oneline.txt
 echo "">> results.txt
 
 echo "Test 4" >> results.txt
 { echo "user user4"; echo "acct acct1"; echo "pass pass4"; echo "done";} | java client/Client.java >> results.txt
-tail -10 results.txt > lines.txt
-cat lines.txt | tr -d '\r\n' > oneline.txt
-
-while IFS="" read -r p || [ -n "$p" ]
-do
-  if [ "$p" = "Successfully connected to localhost on port 6789 +RFC 913 SFTP Server > user user4 +User-id valid, send account and password > acct acct1 +Account valid, send password > pass pass4 !Logged in > done +Closing connection" ]
-  then
-    echo "✓✓✓✓✓✓✓✓✓✓✓Passing✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓">> results.txt
-  else
-    echo "✖✖✖✖✖✖✖✖✖✖Failing✖✖✖✖✖✖✖✖✖✖">> results.txt
-  fi
-done < oneline.txt
 echo "">> results.txt
 
 echo "Test 5" >> results.txt
