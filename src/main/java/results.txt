@@ -254,3 +254,13 @@ Successfully connected to localhost on port 6789
 >done
 +Closing connection
 
+Test 24
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>cdir temp/folder2/evenMoreUser1.txt
+-Cant list directory because: user1/temp/folder2/evenMoreUser1.txt is not a directory
+>done
++Closing connection
+

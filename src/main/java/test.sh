@@ -99,9 +99,9 @@ echo "Test 23" >> results.txt
 { echo "user user1";  echo "cdir temp/folder2/folder3"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 24" >> results.txt
-#{ echo "user user1";  echo "cdir temp/data.csv"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
+echo "Test 24" >> results.txt
+{ echo "user user1";  echo "cdir temp/folder2/evenMoreUser1.txt"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
 
 #echo "Test 25" >> results.txt
 #{ echo "user user2";  echo "cdir folder1"; echo "acct acct1"; echo "done";} | java client/Client.java >> results.txt
