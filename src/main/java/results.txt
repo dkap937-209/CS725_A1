@@ -5,7 +5,6 @@ Successfully connected to localhost on port 6789
 !user1 logged in
 >done
 +Closing connection
-✓✓✓✓✓✓✓✓✓✓✓Passing✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓
 
 Test 2
 Successfully connected to localhost on port 6789
@@ -16,7 +15,6 @@ Successfully connected to localhost on port 6789
 !Account valid, logged-in
 >done
 +Closing connection
-✓✓✓✓✓✓✓✓✓✓✓Passing✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓✓
 
 Test 3
 Successfully connected to localhost on port 6789
@@ -27,7 +25,6 @@ Successfully connected to localhost on port 6789
 ! Logged in
 >done
 +Closing connection
-✖✖✖✖✖✖✖✖✖✖Failing✖✖✖✖✖✖✖✖✖✖
 
 Test 4
 Successfully connected to localhost on port 6789
@@ -40,7 +37,6 @@ Successfully connected to localhost on port 6789
 ! Logged in
 >done
 +Closing connection
-✖✖✖✖✖✖✖✖✖✖Failing✖✖✖✖✖✖✖✖✖✖
 
 Test 5
 Successfully connected to localhost on port 6789
@@ -128,19 +124,6 @@ Successfully connected to localhost on port 6789
 +Using Binary mode
 >type c
 +Using Continuous mode
->done
-+Closing connection
-
-Test 13
-Successfully connected to localhost on port 6789
-+RFC 913 SFTP Server
->user user1
-!user1 logged in
->type a a
-ERROR: Invalid Arguments
-Usage: TYPE { A | B | C }
->type d
--Type not valid
 >done
 +Closing connection
 
