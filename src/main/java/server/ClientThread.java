@@ -142,6 +142,7 @@ public class ClientThread extends Thread {
 
                                         if(pendingDirChange){
                                             res += String.format("\nChanged working dir to %s", currDir);
+                                            pendingDirChange = false;
                                         }
                                     }
                                     break;
@@ -211,6 +212,10 @@ public class ClientThread extends Thread {
                         else{
                             loggedIn = true;
                             res = "! Logged in";
+                            if(pendingDirChange){
+                                res += String.format("\nChanged working dir to %s", currDir);
+                                pendingDirChange = false;
+                            }
                         }
 
                     }

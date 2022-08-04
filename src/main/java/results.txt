@@ -264,3 +264,29 @@ Successfully connected to localhost on port 6789
 >done
 +Closing connection
 
+Test 25
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user2
++User-id valid, send account and password
+>cdir temp
++Directory exists, send account/password
+>acct acct1
+!Account valid, logged-in
+Changed working dir to user2/temp
+>done
++Closing connection
+
+Test 26
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user3
++User-id valid, send account and password
+>cdir temp
++Directory exists, send account/password
+>pass pass3
+! Logged in
+Changed working dir to user3/temp
+>done
++Closing connection
+
