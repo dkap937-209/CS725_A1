@@ -84,6 +84,7 @@ public class ClientThread extends Thread {
                                     found = true;
                                     userEntered = true;
                                     user = userID;
+                                    currDir = user;
                                     password = (String) object.get("password");
                                     usersAccounts = (JSONArray) object.get("accts");
                                     numAccounts = usersAccounts.size();
@@ -252,14 +253,14 @@ public class ClientThread extends Thread {
                                 "Usage: LIST { F | V } directory-path";
                     }
                     else{
+                        String specifiedDir = "";
                         //Creating directory string
-                        currDir = "";
-                        currDir += (mode.length()>1) ? String.format("%s/%s", user, mode.substring(2)) : user;
-                        String dirPath = String.format("%s%s", BASE_DIR, currDir);
-
+                        specifiedDir += currDir + ((mode.length()>1) ? String.format("/%s",mode.substring(2)) :"");
+                        String dirPath = String.format("%s%s", BASE_DIR, specifiedDir);
+                        System.out.println("Dir path: "+ dirPath);
                         try{
                             if(Files.exists(Path.of(dirPath))){
-                                res = String.format("+%s/\n", currDir);
+                                res = String.format("+%s/\n", specifiedDir);
                                 File[] files = new File(dirPath).listFiles();
                                 StringBuilder resBuilder = new StringBuilder(res);
 
@@ -269,6 +270,7 @@ public class ClientThread extends Thread {
                                     for(File file: files){
                                         resBuilder.append(file.getName()).append("\n");
                                     }
+                                    resBuilder.deleteCharAt(resBuilder.length()-1);
                                 }
                                 //Verbose directory listing
                                 else if(mode.startsWith("v")){
@@ -276,10 +278,9 @@ public class ClientThread extends Thread {
                                     for(File file: files){
                                         String fileName = file.getName();
                                         Long fileSize = isAFolder(fileName) ? getFolderSize(dirPath+"/"+fileName) : file.length();
-//                            Long fileSize = file.length();
-
                                         resBuilder.append(String.format("Name: %s Path: %s/%s Size: %d\n", fileName,currDir,fileName, fileSize));
                                     }
+                                    resBuilder.deleteCharAt(resBuilder.length()-1);
                                 }
                                 else{
                                     resBuilder.append("-Argument error");
@@ -294,11 +295,20 @@ public class ClientThread extends Thread {
                         }
                     }
 
-
-
-
                 }
 
+            }
+
+            else if (cmd.startsWith("CDIR")){
+                if(str.length()>4){
+                    String dir = str.substring(5);
+                    if(isAFolder(dir)){
+                        System.out.println("currDir: "+ currDir);
+                        currDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
+                        res = String.format("!Changed working dir to %s", currDir);
+                    }
+
+                }
             }
 
             else if(cmd.startsWith("DONE")){
@@ -311,7 +321,6 @@ public class ClientThread extends Thread {
                 else{
                     res = "ERROR: Invalid Arguments\n" +
                             "Usage: DONE";
-
                 }
 
             }

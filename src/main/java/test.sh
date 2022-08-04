@@ -82,11 +82,11 @@ echo "">> results.txt
 echo "Test 19" >> results.txt
 { echo "user user1";  echo "list f / /"; echo "list g"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
-#
-#echo "Test 20" >> results.txt
-#{ echo "user user1";  echo "cdir folder1"; echo "cdir folder2"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+
+echo "Test 20" >> results.txt
+{ echo "user user1";  echo "cdir temp"; echo "cdir folder2"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 21" >> results.txt
 #{ echo "user user1";  echo "cdir /"; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt

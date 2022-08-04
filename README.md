@@ -187,7 +187,6 @@ Successfully connected to localhost on port 6789
 temp
 user1.jpg
 user1.txt
-
 >done
 +Closing connection
 ```
@@ -200,8 +199,8 @@ Successfully connected to localhost on port 6789
 !user1 logged in
 >list f temp
 +user1/temp/
+folder2
 moreUser1.txt
-
 >done
 +Closing connection
 ```
@@ -217,7 +216,6 @@ Successfully connected to localhost on port 6789
 Name: temp Path: user1/temp Size: 17928
 Name: user1.jpg Path: user1/user1.jpg Size: 0
 Name: user1.txt Path: user1/user1.txt Size: 1628
-
 >done
 +Closing connection
 ```
@@ -231,7 +229,7 @@ Successfully connected to localhost on port 6789
 >user user1
 !user1 logged in
 >list f fake
--Cant list directory because: user1/fake does not exist
+-Cant list directory because: user1 does not exist
 >done
 +Closing connection
 ```
@@ -245,7 +243,7 @@ Successfully connected to localhost on port 6789
 >user user1
 !user1 logged in
 >list f user1.txt
--Cant list directory because: user1/user1.txt is not a directory
+-Cant list directory because: user1 is not a directory
 >done
 +Closing connection
 ```
@@ -267,4 +265,16 @@ Usage: LIST { F | V } directory-path
 +Closing connection
 ```
 
-
+### Test 20
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>cdir temp
+!Changed working dur to user1/temp
+>cdir folder2
+!Changed working dur to user1/temp/folder2
+>done
++Closing connection
+```
