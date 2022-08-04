@@ -278,3 +278,40 @@ Successfully connected to localhost on port 6789
 >done
 +Closing connection
 ```
+
+### Test 21
+```terminal
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>cdir /
+!Changed working dir to user1/
+>done
++Closing connection
+```
+
+### Test 22 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>cdir /temp/folder2
+!Changed working dir to user1/temp/folder2
+>done
++Closing connection
+```
+
+### Test 23
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>cdir temp/folder2/folder3
+-Cant connect to directory because: user1/temp/folder2/folder3 does not exist
+>done
++Closing connection
+```
+

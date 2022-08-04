@@ -257,7 +257,6 @@ public class ClientThread extends Thread {
                         //Creating directory string
                         specifiedDir += currDir + ((mode.length()>1) ? String.format("/%s",mode.substring(2)) :"");
                         String dirPath = String.format("%s%s", BASE_DIR, specifiedDir);
-                        System.out.println("Dir path: "+ dirPath);
                         try{
                             if(Files.exists(Path.of(dirPath))){
                                 res = String.format("+%s/\n", specifiedDir);
@@ -303,9 +302,17 @@ public class ClientThread extends Thread {
                 if(str.length()>4){
                     String dir = str.substring(5);
                     if(isAFolder(dir)){
-                        System.out.println("currDir: "+ currDir);
-                        currDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
-                        res = String.format("!Changed working dir to %s", currDir);
+                        String chkDir = currDir;
+                        chkDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
+
+                        if(Files.exists(Path.of(BASE_DIR+chkDir))){
+                            currDir = chkDir;
+                            res = String.format("!Changed working dir to %s", currDir);
+                        }
+                        else{
+                            res = String.format("-Cant connect to directory because: %s does not exist", chkDir);
+                        }
+
                     }
 
                 }
