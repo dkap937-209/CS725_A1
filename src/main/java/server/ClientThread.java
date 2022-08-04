@@ -35,6 +35,7 @@ public class ClientThread extends Thread {
         String user = null;
         String password = null;
         boolean loggedIn = false;
+        boolean pendingDirChange = false;
         JSONArray usersAccounts = null;
         String selectedAccount = null;
         int numAccounts = 0;
@@ -134,9 +135,14 @@ public class ClientThread extends Thread {
                                     selectedAccount = acctName;
                                     res = passEntered ? "! Account valid, logged-in" : "+Account valid, send password";
                                     assert password != null;
+
                                     if(password.equals("")){
                                         loggedIn = true;
                                         res = "!Account valid, logged-in";
+
+                                        if(pendingDirChange){
+                                            res += String.format("\nChanged working dir to %s", currDir);
+                                        }
                                     }
                                     break;
                                 }
@@ -300,19 +306,25 @@ public class ClientThread extends Thread {
 
             else if (cmd.startsWith("CDIR")){
                 if(str.length()>4){
-                    String dir = str.substring(5);
-                    if(isAFolder(dir)){
-                        String chkDir = currDir;
-                        chkDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
 
+                    //Creating string for directory to change to
+                    String dir = str.substring(5);
+                    String chkDir = currDir;
+                    chkDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
+
+                    if(isAFolder(dir)){
                         if(Files.exists(Path.of(BASE_DIR+chkDir))){
                             currDir = chkDir;
-                            res = String.format("!Changed working dir to %s", currDir);
+                            res = (loggedIn) ? String.format("!Changed working dir to %s", currDir) :
+                                                "+Directory exists, send account/password";
+                            pendingDirChange = true;
                         }
                         else{
                             res = String.format("-Cant connect to directory because: %s does not exist", chkDir);
                         }
-
+                    }
+                    else{
+                        res = String.format("-Cant list directory because: %s is not a directory", chkDir);
                     }
 
                 }
