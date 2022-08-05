@@ -338,3 +338,14 @@ Successfully connected to localhost on port 6789
 >done
 +Closing connection
 
+Test 31
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>kill fake.txt fake.txt
+ERROR: Invalid Arguments
+Usage: KILL file-spec
+>done
++Closing connection
+

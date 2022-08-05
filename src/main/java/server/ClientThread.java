@@ -359,18 +359,26 @@ public class ClientThread extends Thread {
                 if(str.length() > 4){
 
                     String fileName = str.substring(5);
-                    String relDelPath = String.format("%s/%s", currDir, fileName);
-                    String deleteDir = String.format("%s%s", BASE_DIR, relDelPath);
-                    System.out.println("Delete dir: "+ deleteDir);
-                    File fileToDelete = new File(deleteDir);
 
-                    if(fileToDelete.delete()){
-                        res = String.format("+%s deleted", relDelPath);
-                        sendMessageToClient(res, out);
+                    if(isValidInput(fileName)){
+                        String relDelPath = String.format("%s/%s", currDir, fileName);
+                        String deleteDir = String.format("%s%s", BASE_DIR, relDelPath);
+                        System.out.println("Delete dir: "+ deleteDir);
+                        File fileToDelete = new File(deleteDir);
+
+                        if(fileToDelete.delete()){
+                            res = String.format("+%s deleted", relDelPath);
+                            sendMessageToClient(res, out);
+                        }
+                        else{
+                            res = String.format("-Not deleted because %s does not exist", relDelPath);
+                        }
                     }
                     else{
-                        res = String.format("-Not deleted because %s does not exist", relDelPath);
+                        res = "ERROR: Invalid Arguments\n" +
+                                "Usage: KILL file-spec";
                     }
+
                 }
 
 

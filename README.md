@@ -314,4 +314,111 @@ Successfully connected to localhost on port 6789
 >done
 +Closing connection
 ```
+### Test 24
+```terminal
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>cdir temp/folder2/evenMoreUser1.txt
+-Cant list directory because: user1/temp/folder2/evenMoreUser1.txt is not a directory
+>done
++Closing connection
+```
 
+### Test 25
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user2
++User-id valid, send account and password
+>cdir temp
++Directory exists, send account/password
+>acct acct1
+!Account valid, logged-in
+Changed working dir to user2/temp
+>done
++Closing connection
+```
+
+### Test 26
+```terminal
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user3
++User-id valid, send account and password
+>cdir temp
++Directory exists, send account/password
+>pass pass3
+! Logged in
+Changed working dir to user3/temp
+>done
++Closing connection
+```
+
+### Test 27
+```terminal
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user4
++User-id valid, send account and password
+>cdir temp
++Directory exists, send account/password
+>acct acct1
++Account valid, send password
+>pass pass4
+! Logged in
+Changed working dir to user4/temp
+>done
++Closing connection
+```
+
+### Test 28
+```terminal
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>cdir folder1 folder2
+ERROR: Invalid Arguments
+Usage: CDIR new-directory
+>done
++Closing connection
+```
+
+### Test 29
+```terminal
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>kill delete.txt
++user1/delete.txt deleted
+>done
++user1/delete.txt deleted
+```
+
+### Test 30
+```terminal
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>kill fake.txt
+-Not deleted because user1/fake.txt does not exist
+>done
++Closing connection
+```
+
+### Test 31
+```terminal
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>kill fake.txt fake.txt
+ERROR: Invalid Arguments
+Usage: KILL file-spec
+>done
++Closing connection
+```
