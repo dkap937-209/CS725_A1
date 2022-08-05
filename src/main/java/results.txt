@@ -290,3 +290,18 @@ Changed working dir to user3/temp
 >done
 +Closing connection
 
+Test 27
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user4
++User-id valid, send account and password
+>cdir temp
++Directory exists, send account/password
+>acct acct1
++Account valid, send password
+>pass pass4
+! Logged in
+Changed working dir to user4/temp
+>done
++Closing connection
+

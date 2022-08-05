@@ -9,8 +9,6 @@ echo "Test 1" > results.txt
 { echo "user user1"; echo "done"; } | java client/Client.java >> results.txt
 echo "">> results.txt
 
-
-
 echo "Test 2" >> results.txt
 { echo "user user2"; echo "acct acct1"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
@@ -110,11 +108,11 @@ echo "">> results.txt
 echo "Test 26" >> results.txt
 { echo "user user3";  echo "cdir temp"; echo "pass pass3"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
-#
-#echo "Test 27" >> results.txt
-#{ echo "user user4";  echo "cdir folder1"; echo "acct acct1"; echo "pass pass4" echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+
+echo "Test 27" >> results.txt
+{ echo "user user4";  echo "cdir temp"; echo "acct acct1"; echo "pass pass4"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 28" >> results.txt
 #{ echo "user user1";  echo "cdir folder1 folder2";  echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt
