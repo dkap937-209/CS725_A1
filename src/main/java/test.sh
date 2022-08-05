@@ -113,18 +113,18 @@ echo "Test 27" >> results.txt
 { echo "user user4";  echo "cdir temp"; echo "acct acct1"; echo "pass pass4"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 28" >> results.txt
-#{ echo "user user1";  echo "cdir folder1 folder2";  echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
-#echo "Test 29" >> results.txt
-#{ echo "user user1";  echo "kill delete.txt";  echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
-#echo "Test 30" >> results.txt
-#{ echo "user user1";  echo "kill fake.txt";  echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+echo "Test 28" >> results.txt
+{ echo "user user1";  echo "cdir folder1 folder2";  echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
+echo "Test 29" >> results.txt
+{ echo "user user1";  echo "kill delete.txt";  echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
+echo "Test 30" >> results.txt
+{ echo "user user1";  echo "kill fake.txt";  echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 31" >> results.txt
 #{ echo "user user1";  echo "kill fake.txt fake.txt";  echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt

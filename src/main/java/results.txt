@@ -147,6 +147,7 @@ Successfully connected to localhost on port 6789
 !user1 logged in
 >list f
 +user1/
+delete.txt
 temp
 user1.jpg
 user1.txt
@@ -172,6 +173,7 @@ Successfully connected to localhost on port 6789
 !user1 logged in
 >list v
 +user1/
+Name: delete.txt Path: user1/delete.txt Size: 16
 Name: temp Path: user1/temp Size: 17928
 Name: user1.jpg Path: user1/user1.jpg Size: 0
 Name: user1.txt Path: user1/user1.txt Size: 1628
@@ -302,6 +304,37 @@ Successfully connected to localhost on port 6789
 >pass pass4
 ! Logged in
 Changed working dir to user4/temp
+>done
++Closing connection
+
+Test 28
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>cdir folder1 folder2
+ERROR: Invalid Arguments
+Usage: CDIR new-directory
+>done
++Closing connection
+
+Test 29
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>kill delete.txt
++user1/delete.txt deleted
+>done
++user1/delete.txt deleted
+
+Test 30
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>kill fake.txt
+-Not deleted because user1/fake.txt does not exist
 >done
 +Closing connection
 

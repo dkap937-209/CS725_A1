@@ -19,6 +19,18 @@ public class ClientThread extends Thread {
     public ClientThread(Socket clientSocket) {
         System.out.println("New client thread made");
         this.socket = clientSocket;
+
+        String fileData = "DELETE THIS FILE";
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/delete.txt");
+            fos.write(fileData.getBytes());
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 
@@ -194,6 +206,7 @@ public class ClientThread extends Thread {
 
                 }
             }
+
             else if (cmd.startsWith("PASS")){
 
                 if(str.length() > 4){
@@ -338,9 +351,29 @@ public class ClientThread extends Thread {
                         res = "ERROR: Invalid Arguments\n" +
                                 "Usage: CDIR new-directory";
                     }
-
-
                 }
+            }
+
+            else if(cmd.startsWith("KILL")){
+
+                if(str.length() > 4){
+
+                    String fileName = str.substring(5);
+                    String relDelPath = String.format("%s/%s", currDir, fileName);
+                    String deleteDir = String.format("%s%s", BASE_DIR, relDelPath);
+                    System.out.println("Delete dir: "+ deleteDir);
+                    File fileToDelete = new File(deleteDir);
+
+                    if(fileToDelete.delete()){
+                        res = String.format("+%s deleted", relDelPath);
+                        sendMessageToClient(res, out);
+                    }
+                    else{
+                        res = String.format("-Not deleted because %s does not exist", relDelPath);
+                    }
+                }
+
+
             }
 
             else if(cmd.startsWith("DONE")){
@@ -356,6 +389,7 @@ public class ClientThread extends Thread {
                 }
 
             }
+
             else if(cmd.startsWith("TYPE")){
 
                 if(str.length()>4){
