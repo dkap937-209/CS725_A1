@@ -314,23 +314,31 @@ public class ClientThread extends Thread {
 
                     //Creating string for directory to change to
                     String dir = str.substring(5);
-                    String chkDir = currDir;
-                    chkDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
 
-                    if(isAFolder(dir)){
-                        if(Files.exists(Path.of(BASE_DIR+chkDir))){
-                            currDir = chkDir;
-                            res = (loggedIn) ? String.format("!Changed working dir to %s", currDir) :
-                                                "+Directory exists, send account/password";
-                            pendingDirChange = true;
+                    if(isValidInput(dir)){
+                        String chkDir = currDir;
+                        chkDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
+
+                        if(isAFolder(dir)){
+                            if(Files.exists(Path.of(BASE_DIR+chkDir))){
+                                currDir = chkDir;
+                                res = (loggedIn) ? String.format("!Changed working dir to %s", currDir) :
+                                        "+Directory exists, send account/password";
+                                pendingDirChange = true;
+                            }
+                            else{
+                                res = String.format("-Cant connect to directory because: %s does not exist", chkDir);
+                            }
                         }
                         else{
-                            res = String.format("-Cant connect to directory because: %s does not exist", chkDir);
+                            res = String.format("-Cant list directory because: %s is not a directory", chkDir);
                         }
                     }
                     else{
-                        res = String.format("-Cant list directory because: %s is not a directory", chkDir);
+                        res = "ERROR: Invalid Arguments\n" +
+                                "Usage: CDIR new-directory";
                     }
+
 
                 }
             }
