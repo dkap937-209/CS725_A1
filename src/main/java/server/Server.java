@@ -123,8 +123,6 @@ public class Server {
                 InetAddress serverHost = InetAddress.getLocalHost();
                 System.out.println("Server destination: " + serverHost.getHostAddress() + ":" + socket.getLocalPort());
 
-
-//            while (true) {
                 try (Socket clientConnection = socket.accept()) {
                     new ClientThread(clientConnection).start();
                 } catch (Exception ignored) {
@@ -132,17 +130,6 @@ public class Server {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-    }
-
-    public static void sendMessageToClient(String res, DataOutputStream out){
-        try{
-            int resLength = res.length();
-            out.writeInt(resLength);
-            out.writeChars(res);
-            out.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

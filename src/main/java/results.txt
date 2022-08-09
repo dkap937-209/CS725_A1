@@ -148,6 +148,7 @@ Successfully connected to localhost on port 6789
 >list f
 +user1/
 delete.txt
+rename.txt
 temp
 user1.jpg
 user1.txt
@@ -174,6 +175,7 @@ Successfully connected to localhost on port 6789
 >list v
 +user1/
 Name: delete.txt Path: user1/delete.txt Size: 16
+Name: rename.txt Path: user1/rename.txt Size: 16
 Name: temp Path: user1/temp Size: 17928
 Name: user1.jpg Path: user1/user1.jpg Size: 0
 Name: user1.txt Path: user1/user1.txt Size: 1628
@@ -324,9 +326,9 @@ Successfully connected to localhost on port 6789
 >user user1
 !user1 logged in
 >kill delete.txt
-+user1/delete.txt deleted
+-Not deleted because user1/delete.txt does not exist
 >done
-+user1/delete.txt deleted
++Closing connection
 
 Test 30
 Successfully connected to localhost on port 6789
@@ -346,6 +348,20 @@ Successfully connected to localhost on port 6789
 >kill fake.txt fake.txt
 ERROR: Invalid Arguments
 Usage: KILL file-spec
+>done
++Closing connection
+
+Test 32
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>name rename.txt
++File exists
+>tobe new.txt
+user1/rename.txt renamed to user1/new.txt
+>kill new.txt
++user1/new.txt deleted
 >done
 +Closing connection
 

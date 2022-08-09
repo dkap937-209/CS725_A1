@@ -422,3 +422,19 @@ Usage: KILL file-spec
 >done
 +Closing connection
 ```
+
+### Test 32
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>name rename.txt
++File exists
+>tobe new.txt
+user1/rename.txt renamed to user1/new.txt
+>kill new.txt
++user1/new.txt deleted
+>done
++Closing connection
+```

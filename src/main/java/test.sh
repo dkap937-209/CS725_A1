@@ -1,6 +1,4 @@
 #!/bin/bash
-#javac Client.java
-
 javac -cp . util/Keyboard.java util/ReadChars.java
 javac -cp . Conn_Info/Connection_Information.java
 javac -cp . client/Client.java
@@ -129,10 +127,10 @@ echo "Test 31" >> results.txt
 { echo "user user1";  echo "kill fake.txt fake.txt";  echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 32" >> results.txt
-#{ echo "user user1";  echo "name rename.txt"; echo "tobe new.txt"; echo "kill new.txt" echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+echo "Test 32" >> results.txt
+{ echo "user user1";  echo "name rename.txt"; echo "tobe new.txt"; echo "kill new.txt"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 33" >> results.txt
 #{ echo "user user1";  echo "name fake.txt"; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt
@@ -142,7 +140,7 @@ echo "">> results.txt
 #echo "">> results.txt
 #
 #echo "Test 35" >> results.txt
-#{ echo "user user1";  echo "name fake.txt fake.txt" echo "name file.txt" echo "tobe new.txt new.txt" ; echo "done";} | java client/Client.java >> results.txt
+#{ echo "user user1";  echo "name fake.txt fake.txt" echo "name file.txt" echo "tobe rename.txt rename.txt" ; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt
 #
 #echo "Test 36" >> results.txt

@@ -20,12 +20,21 @@ public class ClientThread extends Thread {
         System.out.println("New client thread made");
         this.socket = clientSocket;
 
-        String fileData = "DELETE THIS FILE";
+        String delteFileData = "DELETE THIS FILE";
+        String renameFileData = "RENAME THIS FILE";
         FileOutputStream fos = null;
+
         try {
+
+
             fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/delete.txt");
-            fos.write(fileData.getBytes());
+            fos.write(delteFileData.getBytes());
             fos.flush();
+
+            fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/rename.txt");
+            fos.write(delteFileData.getBytes());
+            fos.flush();
+
             fos.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -52,9 +61,11 @@ public class ClientThread extends Thread {
         String selectedAccount = null;
         int numAccounts = 0;
         String currDir = "src/main/resources/server_files/user_files/";
-
         boolean userEntered = false;
         boolean passEntered = false;
+        String renamePath = "";
+        String filePath = "";
+
         sendMessageToClient("Successfully connected to localhost on port 6789\n" +
                 "+RFC 913 SFTP Server", out);
 
@@ -115,17 +126,12 @@ public class ClientThread extends Thread {
                             }
 
                             if(!found){
-                                System.out.println("Id received: "+ userID);
-                                System.out.println(userID.length());
                                 res = "-Invalid user-id, try again";
                             }
                         } catch (ParseException | IOException e) {
                             throw new RuntimeException(e);
                         }
                     }
-
-                    //Looping through db.json to find the user
-
                 }
             }
 
@@ -199,8 +205,6 @@ public class ClientThread extends Thread {
                             } catch (ParseException | IOException e) {
                                 throw new RuntimeException(e);
                             }
-
-
                         }
                     }
 
@@ -363,24 +367,55 @@ public class ClientThread extends Thread {
                     if(isValidInput(fileName)){
                         String relDelPath = String.format("%s/%s", currDir, fileName);
                         String deleteDir = String.format("%s%s", BASE_DIR, relDelPath);
-                        System.out.println("Delete dir: "+ deleteDir);
                         File fileToDelete = new File(deleteDir);
 
-                        if(fileToDelete.delete()){
-                            res = String.format("+%s deleted", relDelPath);
-                            sendMessageToClient(res, out);
-                        }
-                        else{
-                            res = String.format("-Not deleted because %s does not exist", relDelPath);
-                        }
+                        res = (fileToDelete.delete()) ? String.format("+%s deleted", relDelPath):
+                                                        String.format("-Not deleted because %s does not exist", relDelPath);
                     }
                     else{
                         res = "ERROR: Invalid Arguments\n" +
                                 "Usage: KILL file-spec";
                     }
+                }
+            }
+
+            else if(cmd.startsWith("NAME")){
+
+                if(str.length()>4){
+                    String fileName = str.substring(5);
+
+                    if(isValidInput(fileName)){
+
+                        //Probably need to make them in global scope of function
+                        renamePath = String.format("%s/%s", currDir, fileName);
+                        filePath = String.format("%s%s", BASE_DIR, renamePath);
+
+                        if(Files.exists(Path.of(filePath))){
+                            res = "+File exists";
+                        }
+                        else{
+                            res = String.format("Can't find %s", renamePath);
+                        }
+
+
+                    }
 
                 }
+            }
 
+            else if(cmd.startsWith("TOBE")){
+
+                if(str.length()>4){
+                    String newFileName = str.substring(5);
+
+                    File file = new File(filePath);
+                    String newFilePathName = String.format("%s/%s", currDir, newFileName);
+                    String newPath = String.format("%s%s", BASE_DIR, newFilePathName);
+
+                    if(file.renameTo(new File(newPath))){
+                        res = String.format("%s renamed to %s", renamePath, newFilePathName);
+                    }
+                }
 
             }
 
@@ -388,6 +423,7 @@ public class ClientThread extends Thread {
 
                 if(isValidInput(str)){
                     res = "+Closing connection";
+                    System.out.println("Value of res: "+ res);
                     sendMessageToClient(res, out);
                     return;
                 }
@@ -433,35 +469,34 @@ public class ClientThread extends Thread {
             }
 
             sendMessageToClient(res, out);
-
-
-
         }
-
-
     }
 
+    /**
+     * Retrieve the cummulative size of the files within a folder
+     *
+     * @param path {@link String}Path of the folder to find the size of
+     * @return Size of the folder
+     */
     private Long getFolderSize(String path) {
         long size = 0L;
         File[] files = new File(path).listFiles();
-        System.out.println("Path is "+path);
         if (files != null) {
-            System.out.println("There are files");
             for(File f: files){
                 size+=f.length();
             }
         }
-        System.out.println("Value of size: "+ size);
         return size;
     }
 
     /**
      * Send a message to the client
-     * @param res Response to be sent to the client
+     * @param res {@link String} Response to be sent to the client
      * @param out {@link DataOutputStream} object to send response through
      */
     public static void sendMessageToClient(String res, DataOutputStream out){
         try{
+            System.out.println("Message received: "+ res);
             int resLength = res.length();
             out.writeInt(resLength);
             out.writeChars(res);
@@ -480,6 +515,12 @@ public class ClientThread extends Thread {
         return !(input.split(" ").length > 1);
     }
 
+    /**
+     * Checks if a filename is for a file or folder
+     *
+     * @param fileName {@link String} object to check
+     * @return {@link Boolean} object if the name is a folder or not
+     */
     public static boolean isAFolder(String fileName){
         return !fileName.contains(".");
     }

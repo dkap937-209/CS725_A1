@@ -4,9 +4,7 @@ import Conn_Info.Connection_Information;
 import util.Keyboard;
 import util.ReadChars;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 public class Client {
@@ -20,6 +18,7 @@ public class Client {
 
             String greeting = ReadChars.readStringIn(in);
             System.out.println(greeting);
+
             while(true){
                 /* Send Command to the Server **/
                 System.out.print(">");
