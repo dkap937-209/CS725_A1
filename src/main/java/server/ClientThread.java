@@ -273,7 +273,10 @@ public class ClientThread extends Thread {
 
             else if (cmd.startsWith("LIST")){
 
-                if(str.length() > 4){
+                if(!loggedIn){
+                    res = "-Please log in first";
+                }
+                else if(str.length() > 4){
 
                     String mode = str.substring(5);
                     if(mode.split(" ").length > 2){
@@ -327,7 +330,11 @@ public class ClientThread extends Thread {
             }
 
             else if (cmd.startsWith("CDIR")){
-                if(str.length()>4){
+
+                if(!loggedIn){
+                    res = "-Please log in first";
+                }
+                else if(str.length()>4){
 
                     //Creating string for directory to change to
                     String dir = str.substring(5);
@@ -360,7 +367,10 @@ public class ClientThread extends Thread {
 
             else if(cmd.startsWith("KILL")){
 
-                if(str.length() > 4){
+                if(!loggedIn){
+                    res = "-Please log in first";
+                }
+                else if(str.length() > 4){
 
                     String fileName = str.substring(5);
 
@@ -381,7 +391,10 @@ public class ClientThread extends Thread {
 
             else if(cmd.startsWith("NAME")){
 
-                if(str.length()>4){
+                if(!loggedIn){
+                    res = "-Please log in first";
+                }
+                else if(str.length()>4){
                     String fileName = str.substring(5);
 
                     if(isValidInput(fileName)){
@@ -409,7 +422,10 @@ public class ClientThread extends Thread {
 
             else if(cmd.startsWith("TOBE")){
 
-                if(str.length()>4){
+                if(!loggedIn){
+                    res = "-Please log in first";
+                }
+                else if(str.length()>4){
                     String newFileName = str.substring(5);
 
                     if(isValidInput(newFileName)){
@@ -451,7 +467,10 @@ public class ClientThread extends Thread {
 
             else if(cmd.startsWith("TYPE")){
 
-                if(str.length()>4){
+                if(!loggedIn){
+                    res = "-Please log in first";
+                }
+                else if(str.length()>4){
                     String type = str.substring(5);
 
                     switch(type){

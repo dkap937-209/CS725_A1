@@ -278,10 +278,9 @@ Successfully connected to localhost on port 6789
 >user user2
 +User-id valid, send account and password
 >cdir temp
-+Directory exists, send account/password
+-Please log in first
 >acct acct1
 !Account valid, logged-in
-Changed working dir to user2/temp
 >done
 +Closing connection
 
@@ -291,10 +290,9 @@ Successfully connected to localhost on port 6789
 >user user3
 +User-id valid, send account and password
 >cdir temp
-+Directory exists, send account/password
+-Please log in first
 >pass pass3
 ! Logged in
-Changed working dir to user3/temp
 >done
 +Closing connection
 
@@ -304,12 +302,11 @@ Successfully connected to localhost on port 6789
 >user user4
 +User-id valid, send account and password
 >cdir temp
-+Directory exists, send account/password
+-Please log in first
 >acct acct1
 +Account valid, send password
 >pass pass4
 ! Logged in
-Changed working dir to user4/temp
 >done
 +Closing connection
 
@@ -417,6 +414,27 @@ Successfully connected to localhost on port 6789
 >done done
 ERROR: Invalid Arguments
 Usage: DONE
+>done
++Closing connection
+
+Test 52
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>type a
+-Please log in first
+>list f
+Please log in first
+>name rename.txt
+-Please log in first
+>done
++Closing connection
+
+Test 53
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>unknown
+ERROR: Invalid Command
+Available Commands: "USER", "ACCT", "PASS", "TYPE", "LIST", "CDIR", "KILL", "NAME", "TOBE", "DONE", "RETR", "SEND", "STOP", "STOR", "SIZE"
 >done
 +Closing connection
 

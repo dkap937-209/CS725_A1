@@ -506,3 +506,28 @@ Usage: DONE
 >done
 +Closing connection
 ```
+
+### Test 52
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>type a
+-Please log in first
+>list f
+Please log in first
+>name rename.txt
+-Please log in first
+>done
++Closing connection
+```
+
+### Test 53 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>unknown
+ERROR: Invalid Command
+Available Commands: "USER", "ACCT", "PASS", "TYPE", "LIST", "CDIR", "KILL", "NAME", "TOBE", "DONE", "RETR", "SEND", "STOP", "STOR", "SIZE"
+>done
++Closing connection
+```
