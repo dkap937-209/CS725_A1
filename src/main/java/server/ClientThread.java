@@ -412,7 +412,11 @@ public class ClientThread extends Thread {
                     String newFilePathName = String.format("%s/%s", currDir, newFileName);
                     String newPath = String.format("%s%s", BASE_DIR, newFilePathName);
 
-                    if(file.renameTo(new File(newPath))){
+                    if(Files.exists(Path.of(newPath))){
+                        //A file with the same name already exist
+                        res = String.format("File wasn't renamed because %s already exists", newFilePathName);
+                    }
+                    else if(file.renameTo(new File(newPath))){
                         res = String.format("%s renamed to %s", renamePath, newFilePathName);
                     }
                 }
@@ -423,7 +427,6 @@ public class ClientThread extends Thread {
 
                 if(isValidInput(str)){
                     res = "+Closing connection";
-                    System.out.println("Value of res: "+ res);
                     sendMessageToClient(res, out);
                     return;
                 }

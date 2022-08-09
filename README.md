@@ -184,6 +184,10 @@ Successfully connected to localhost on port 6789
 !user1 logged in
 >list f
 +user1/
+delete.txt
+file.txt
+file2.txt
+rename.txt
 temp
 user1.jpg
 user1.txt
@@ -213,6 +217,10 @@ Successfully connected to localhost on port 6789
 !user1 logged in
 >list v
 +user1/
+Name: delete.txt Path: user1/delete.txt Size: 16
+Name: file.txt Path: user1/file.txt Size: 14
+Name: file2.txt Path: user1/file2.txt Size: 14
+Name: rename.txt Path: user1/rename.txt Size: 16
 Name: temp Path: user1/temp Size: 17928
 Name: user1.jpg Path: user1/user1.jpg Size: 0
 Name: user1.txt Path: user1/user1.txt Size: 1628
@@ -447,6 +455,17 @@ Successfully connected to localhost on port 6789
 !user1 logged in
 >name fake.txt
 Can't find user1/fake.txt
+>done
++Closing connection
+```
+### Test 34
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>tobe file2.txt
+File wasn't renamed because user1/file2.txt already exists
 >done
 +Closing connection
 ```
