@@ -32,7 +32,7 @@ Successfully connected to localhost on port 6789
 >user user4
 +User-id valid, send account and password
 >acct acct1
-+Account valid, send password
+! Account valid, logged-in
 >pass pass4
 ! Logged in
 >done
@@ -44,7 +44,7 @@ Successfully connected to localhost on port 6789
 >user user5
 +User-id valid, send account and password
 >pass pass5
-+Send account
+! Logged in
 >acct acct1
 ! Account valid, logged-in
 >acct acct2
@@ -176,13 +176,13 @@ Successfully connected to localhost on port 6789
 !user1 logged in
 >list v
 +user1/
-Name: delete.txt Path: user1/delete.txt Size: 16
-Name: file.txt Path: user1/file.txt Size: 14
-Name: file2.txt Path: user1/file2.txt Size: 14
-Name: rename.txt Path: user1/rename.txt Size: 16
-Name: temp Path: user1/temp Size: 17928
-Name: user1.jpg Path: user1/user1.jpg Size: 0
-Name: user1.txt Path: user1/user1.txt Size: 1628
+Name: delete.txt Path: user1/delete.txt Size: 16 Bytes
+Name: file.txt Path: user1/file.txt Size: 14 Bytes
+Name: file2.txt Path: user1/file2.txt Size: 14 Bytes
+Name: rename.txt Path: user1/rename.txt Size: 16 Bytes
+Name: temp Path: user1/temp Size: 17928 Bytes
+Name: user1.jpg Path: user1/user1.jpg Size: 0 Bytes
+Name: user1.txt Path: user1/user1.txt Size: 1628 Bytes
 >done
 +Closing connection
 
@@ -281,6 +281,7 @@ Successfully connected to localhost on port 6789
 -Please log in first
 >acct acct1
 !Account valid, logged-in
+Changed working dir to user2
 >done
 +Closing connection
 
@@ -304,7 +305,7 @@ Successfully connected to localhost on port 6789
 >cdir temp
 -Please log in first
 >acct acct1
-+Account valid, send password
+! Account valid, logged-in
 >pass pass4
 ! Logged in
 >done
@@ -327,7 +328,7 @@ Successfully connected to localhost on port 6789
 >user user1
 !user1 logged in
 >kill delete.txt
--Not deleted because user1/delete.txt does not exist
++user1/delete.txt deleted
 >done
 +Closing connection
 
@@ -423,7 +424,7 @@ Successfully connected to localhost on port 6789
 >type a
 -Please log in first
 >list f
-Please log in first
+-Please log in first
 >name rename.txt
 -Please log in first
 >done

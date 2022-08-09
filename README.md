@@ -43,6 +43,7 @@ Successfully connected to localhost on port 6789
 
 
 ### Test 4
+```terminal 
 Successfully connected to localhost on port 6789
 +RFC 913 SFTP Server
 >user user4
@@ -53,6 +54,8 @@ Successfully connected to localhost on port 6789
 ! Logged in
 >done
 +Closing connection
+```
+
 
 ### Test 5
 ```terminal 
