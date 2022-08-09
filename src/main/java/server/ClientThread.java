@@ -399,6 +399,10 @@ public class ClientThread extends Thread {
 
 
                     }
+                    else{
+                        res = "ERROR: Invalid Arguments\n" +
+                                "Usage: NAME old-file-spec";
+                    }
 
                 }
             }
@@ -408,17 +412,25 @@ public class ClientThread extends Thread {
                 if(str.length()>4){
                     String newFileName = str.substring(5);
 
-                    File file = new File(filePath);
-                    String newFilePathName = String.format("%s/%s", currDir, newFileName);
-                    String newPath = String.format("%s%s", BASE_DIR, newFilePathName);
+                    if(isValidInput(newFileName)){
+                        File file = new File(filePath);
+                        String newFilePathName = String.format("%s/%s", currDir, newFileName);
+                        String newPath = String.format("%s%s", BASE_DIR, newFilePathName);
 
-                    if(Files.exists(Path.of(newPath))){
-                        //A file with the same name already exist
-                        res = String.format("File wasn't renamed because %s already exists", newFilePathName);
+                        if(Files.exists(Path.of(newPath))){
+                            //A file with the same name already exist
+                            res = String.format("File wasn't renamed because %s already exists", newFilePathName);
+                        }
+                        else if(file.renameTo(new File(newPath))){
+                            res = String.format("%s renamed to %s", renamePath, newFilePathName);
+                        }
                     }
-                    else if(file.renameTo(new File(newPath))){
-                        res = String.format("%s renamed to %s", renamePath, newFilePathName);
+                    else{
+                        res = "ERROR: Invalid Arguments\n" +
+                                "Usage: TOBE new-file-spec";
                     }
+
+
                 }
 
             }

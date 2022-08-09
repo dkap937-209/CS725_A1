@@ -469,3 +469,40 @@ File wasn't renamed because user1/file2.txt already exists
 >done
 +Closing connection
 ```
+
+### Test 35 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>name fake.txt fake.txt
+ERROR: Invalid Arguments
+Usage: NAME old-file-spec
+>name file.txt
++File exists
+>tobe rename.txt rename.txt
+ERROR: Invalid Arguments
+Usage: TOBE new-file-spec
+>done
++Closing connection
+```
+
+### Test 36 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>done
++Closing connection
+```
+
+### Test 37 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>done done
+ERROR: Invalid Arguments
+Usage: DONE
+>done
++Closing connection
+```

@@ -139,18 +139,18 @@ echo "Test 34" >> results.txt
 { echo "user user1";  echo "tobe file2.txt"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 35" >> results.txt
-#{ echo "user user1";  echo "name fake.txt fake.txt" echo "name file.txt" echo "tobe rename.txt rename.txt" ; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
-#echo "Test 36" >> results.txt
-#{ echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
-#echo "Test 37" >> results.txt
-#{ echo "done done"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+echo "Test 35" >> results.txt
+{ echo "user user1";  echo "name fake.txt fake.txt"; echo "name file.txt"; echo "tobe rename.txt rename.txt"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
+echo "Test 36" >> results.txt
+{ echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
+echo "Test 37" >> results.txt
+{ echo "done done"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 38" >> results.txt
 #{ echo "user user1"; echo "retr temp/data.csv"; echo "send" echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt
