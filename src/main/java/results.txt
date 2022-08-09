@@ -365,3 +365,13 @@ user1/rename.txt renamed to user1/new.txt
 >done
 +Closing connection
 
+Test 33
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>name fake.txt
+Can't find user1/fake.txt
+>done
++Closing connection
+

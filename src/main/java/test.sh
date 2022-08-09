@@ -131,10 +131,10 @@ echo "Test 32" >> results.txt
 { echo "user user1";  echo "name rename.txt"; echo "tobe new.txt"; echo "kill new.txt"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 33" >> results.txt
-#{ echo "user user1";  echo "name fake.txt"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+echo "Test 33" >> results.txt
+{ echo "user user1";  echo "name fake.txt"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 34" >> results.txt
 #{ echo "user user1";  echo "tobe file2.txt"; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt

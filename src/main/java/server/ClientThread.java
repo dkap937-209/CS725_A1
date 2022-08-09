@@ -496,7 +496,6 @@ public class ClientThread extends Thread {
      */
     public static void sendMessageToClient(String res, DataOutputStream out){
         try{
-            System.out.println("Message received: "+ res);
             int resLength = res.length();
             out.writeInt(resLength);
             out.writeChars(res);
