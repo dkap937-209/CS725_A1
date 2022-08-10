@@ -159,14 +159,10 @@ echo "Test 39" >> results.txt
 { echo "user user1"; echo "retr file.txt"; echo "stop"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 39" >> results.txt
-#{ echo "user user1"; echo "retr temp/data.csv"; echo "stop" echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
-#echo "Test 40" >> results.txt
-#{ echo "user user1"; echo "retr fake.txt"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+echo "Test 40" >> results.txt
+{ echo "user user1"; echo "retr fake.txt"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 41" >> results.txt
 #{ echo "user user1"; echo "retr temp"; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt

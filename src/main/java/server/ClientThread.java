@@ -641,28 +641,10 @@ public class ClientThread extends Thread {
                 retrievedFile = new File(retrievedFilePath);
                 res = String.format("+%d bytes will be sent", retrievedFile.length());
             }
+            else{
+                res = "-File doesn't exist";
+            }
         }
     }
-
-    //TODO: make it that the message gets sent first and then the file afterwards
-//    private void performSendCommand() {
-//
-//        try {
-//
-//            FileInputStream fis = new FileInputStream(retrievedFile);
-//            byte[] b = new byte[(int)retrievedFile.length()];
-//            fis.read(b, 0, b.length);
-//            OutputStream os = socket.getOutputStream();
-//            os.write(b,0,b.length);
-//            os.write(b, 0, b.length);
-//            res = "+File sent";
-//            sendMessageToClient(res, this.out);
-//
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//    }
-
 
 }

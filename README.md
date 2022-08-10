@@ -524,6 +524,18 @@ Successfully connected to localhost on port 6789
 +Closing connection
 ```
 
+### Test 40 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>retr fake.txt
+-File doesn't exist
+>done
++Closing connection
+```
+
 ### Test 52
 ```terminal 
 Successfully connected to localhost on port 6789
