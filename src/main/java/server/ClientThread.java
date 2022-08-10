@@ -85,11 +85,17 @@ public class ClientThread extends Thread {
                 try {
 
                     FileInputStream fis = new FileInputStream(retrievedFile);
-                    byte[] b = new byte[(int)retrievedFile.length()];
-                    fis.read(b, 0, b.length);
-                    OutputStream os = socket.getOutputStream();
-                    os.write(b,0,b.length);
-                    os.write(b, 0, b.length);
+//                    byte[] b = new byte[(int)retrievedFile.length()];
+//                    fis.read(b, 0, b.length);
+//                    OutputStream os = socket.getOutputStream();
+//                    os.write(b,0,b.length);
+//                    os.write(b, 0, b.length);
+
+                    int r;
+                    while((r=fis.read())!=-1){
+                        out.write(r);
+                    }
+
                     sendFile = false;
                     continue;
 

@@ -32,18 +32,25 @@ public class Client {
                             size.append(c);
                         }
                     }
-                    System.out.println("In here");
 //                    int fileSize = (int)Math.pow(2, 30);
-                    int fileSize = 20;
-                    byte [] b  = new byte [fileSize];
-                    InputStream is = socket.getInputStream();
-                    System.out.println("point 1");
+
+//                    int fileSize = 20;
+//                    byte [] b  = new byte [fileSize];
+//                    InputStream is = socket.getInputStream();
+//                    System.out.println("point 1");
                     FileOutputStream fos = new FileOutputStream("src/main/resources/client_files/file3.txt");
-                    System.out.println("point 2");
-                    is.read(b, 0, b.length);
-                    System.out.println("point 3");
-                    fos.write(b, 0, b.length);
-                    System.out.println("Over here");
+//                    System.out.println("point 2");
+//                    is.read(b, 0, b.length);
+//                    System.out.println("point 3");
+//                    fos.write(b, 0, b.length);
+//                    System.out.println("Over here");
+
+                    int r;
+                    while((r=in.read())!=-1){
+                        fos.write((char)r);
+                    }
+
+
 
                 }
                 else{
@@ -117,4 +124,7 @@ public class Client {
             e.printStackTrace();
         }
     }
+
+
 }
+
