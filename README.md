@@ -510,6 +510,20 @@ Usage: DONE
 +Closing connection
 ```
 
+### Test 39 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>retr file.txt
++14 bytes will be sent
+>stop
++File will not be sent
+>done
++Closing connection
+```
+
 ### Test 52
 ```terminal 
 Successfully connected to localhost on port 6789

@@ -33,14 +33,17 @@ public class ClientThread extends Thread {
     private  String res;
 
     private  String cmd;
-
+    private FileOutputStream fos = null;
+    private File retrievedFile;
+    private DataInputStream in = null;
+    private DataOutputStream out = null;
+    private boolean sendFile = false;
     public ClientThread(Socket clientSocket) {
         System.out.println("New client thread made");
         this.socket = clientSocket;
 
         String delteFileData = "DELETE THIS FILE";
         String renameFileData = "RENAME THIS FILE";
-        FileOutputStream fos = null;
 
         try {
             fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/delete.txt");
@@ -48,7 +51,7 @@ public class ClientThread extends Thread {
             fos.flush();
 
             fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/rename.txt");
-            fos.write(delteFileData.getBytes());
+            fos.write(renameFileData.getBytes());
             fos.flush();
 
             fos.close();
@@ -60,8 +63,6 @@ public class ClientThread extends Thread {
 
 
     public synchronized void start(){
-        DataInputStream in = null;
-        DataOutputStream out = null;
         try {
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
@@ -69,18 +70,6 @@ public class ClientThread extends Thread {
             return;
         }
 
-//        String user = null;
-//        String password = null;
-//        boolean loggedIn = false;
-//        boolean pendingDirChange = false;
-//        JSONArray usersAccounts = null;
-//        String selectedAccount = null;
-//        int numAccounts = 0;
-//        String currDir = "src/main/resources/server_files/user_files/";
-//        boolean userEntered = false;
-//        boolean passEntered = false;
-//        String renamePath = "";
-//        String filePath = "";
 
         sendMessageToClient("Successfully connected to localhost on port 6789\n" +
                 "+RFC 913 SFTP Server", out);
@@ -92,10 +81,26 @@ public class ClientThread extends Thread {
             parser = new JSONParser();
             res = "";
 
+            if(sendFile){
+                try {
+
+                    FileInputStream fis = new FileInputStream(retrievedFile);
+                    byte[] b = new byte[(int)retrievedFile.length()];
+                    fis.read(b, 0, b.length);
+                    OutputStream os = socket.getOutputStream();
+                    os.write(b,0,b.length);
+                    os.write(b, 0, b.length);
+                    sendFile = false;
+                    continue;
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             cmd = str.substring(0, 4);
             cmd = cmd.toUpperCase();
 
-            /** User Command **/
             if(cmd.startsWith("USER")){
                 performUserCommand();
             }
@@ -128,6 +133,19 @@ public class ClientThread extends Thread {
                 performTOBECommand();
             }
 
+            else if(cmd.startsWith("RETR")){
+                performRetrieveCommand();
+            }
+
+            else if(cmd.startsWith("SEND")){
+//                performSendCommand();
+                res = "+File sent";
+                sendFile = true;
+            }
+            else if(cmd.startsWith("STOP")){
+                res = "+File will not be sent";
+            }
+
             else if(cmd.startsWith("DONE")){
 
                 if(isValidInput(str)){
@@ -143,35 +161,6 @@ public class ClientThread extends Thread {
 
             else if(cmd.startsWith("TYPE")){
                 performTypeCommand();
-//                if(!loggedIn){
-//                    res = "-Please log in first";
-//                }
-//                else if(str.length()>4){
-//                    String type = str.substring(5);
-//
-//                    switch(type){
-//                        case "a":
-//                            res = "+Using Ascii mode";
-//                            break;
-//
-//                        case "b":
-//                            res = "+Using Binary mode";
-//                            break;
-//
-//                        case "c":
-//                            res = "+Using Continuous mode";
-//                            break;
-//                        default:
-//                            if(isValidInput(type)){
-//                                res = "-Type not valid";
-//
-//                            }else{
-//                                res = "ERROR: Invalid Arguments\n" +
-//                                        "Usage: TYPE { A | B | C }";
-//                            }
-//
-//                    }
-//                }
             }
             else{
                 res = "ERROR: Invalid Command\n" +
@@ -181,6 +170,8 @@ public class ClientThread extends Thread {
             sendMessageToClient(res, out);
         }
     }
+
+
 
     /**
      * Retrieve the cummulative size of the files within a folder
@@ -639,8 +630,39 @@ public class ClientThread extends Thread {
         }
     }
 
+    private void performRetrieveCommand() {
 
+        if(str.length() > 4){
 
+            String fileToRetrieve = str.substring(5);
+            String retrievedFilePath = String.format("%s%s/%s", BASE_DIR, currDir, fileToRetrieve);
+
+            if(Files.exists(Path.of(retrievedFilePath))){
+                retrievedFile = new File(retrievedFilePath);
+                res = String.format("+%d bytes will be sent", retrievedFile.length());
+            }
+        }
+    }
+
+    //TODO: make it that the message gets sent first and then the file afterwards
+//    private void performSendCommand() {
+//
+//        try {
+//
+//            FileInputStream fis = new FileInputStream(retrievedFile);
+//            byte[] b = new byte[(int)retrievedFile.length()];
+//            fis.read(b, 0, b.length);
+//            OutputStream os = socket.getOutputStream();
+//            os.write(b,0,b.length);
+//            os.write(b, 0, b.length);
+//            res = "+File sent";
+//            sendMessageToClient(res, this.out);
+//
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//    }
 
 
 }

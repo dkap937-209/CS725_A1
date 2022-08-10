@@ -32,7 +32,7 @@ Successfully connected to localhost on port 6789
 >user user4
 +User-id valid, send account and password
 >acct acct1
-! Account valid, logged-in
++Account valid, send password
 >pass pass4
 ! Logged in
 >done
@@ -44,7 +44,7 @@ Successfully connected to localhost on port 6789
 >user user5
 +User-id valid, send account and password
 >pass pass5
-! Logged in
++Send account
 >acct acct1
 ! Account valid, logged-in
 >acct acct2
@@ -281,7 +281,6 @@ Successfully connected to localhost on port 6789
 -Please log in first
 >acct acct1
 !Account valid, logged-in
-Changed working dir to user2
 >done
 +Closing connection
 
@@ -305,7 +304,7 @@ Successfully connected to localhost on port 6789
 >cdir temp
 -Please log in first
 >acct acct1
-! Account valid, logged-in
++Account valid, send password
 >pass pass4
 ! Logged in
 >done
@@ -415,6 +414,18 @@ Successfully connected to localhost on port 6789
 >done done
 ERROR: Invalid Arguments
 Usage: DONE
+>done
++Closing connection
+
+Test 39
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>retr file.txt
++14 bytes will be sent
+>stop
++File will not be sent
 >done
 +Closing connection
 
