@@ -637,7 +637,10 @@ public class ClientThread extends Thread {
             String fileToRetrieve = str.substring(5);
             String retrievedFilePath = String.format("%s%s/%s", BASE_DIR, currDir, fileToRetrieve);
 
-            if(Files.exists(Path.of(retrievedFilePath))){
+            if(isAFolder(fileToRetrieve)){
+                res = "-Specifier is not a file";
+            }
+            else if(Files.exists(Path.of(retrievedFilePath))){
                 retrievedFile = new File(retrievedFilePath);
                 res = String.format("+%d bytes will be sent", retrievedFile.length());
             }

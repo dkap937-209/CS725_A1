@@ -536,6 +536,18 @@ Successfully connected to localhost on port 6789
 +Closing connection
 ```
 
+### Test 41 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>retr temp
+-Specifier is not a file
+>done
++Closing connection
+```
+
 ### Test 52
 ```terminal 
 Successfully connected to localhost on port 6789
