@@ -167,10 +167,10 @@ echo "Test 41" >> results.txt
 { echo "user user1"; echo "retr temp"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 42" >> results.txt
-#{ echo "user user1"; echo "retr file.txt file.txt"; echo "retr file.txt"; echo "send send"; echo "stop stop"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+echo "Test 42" >> results.txt
+{ echo "user user1"; echo "retr file.txt file.txt"; echo "retr file.txt"; echo "send send"; echo "stop stop"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 43" >> results.txt
 #{ echo "user user1"; echo "stor new file.txt"; echo "size 8"; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt

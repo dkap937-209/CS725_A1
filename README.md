@@ -547,6 +547,26 @@ Successfully connected to localhost on port 6789
 >done
 +Closing connection
 ```
+### Test 42 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>retr file.txt file.txt
+ERROR: Invalid Arguments
+Usage: RETR file-spec
+>retr file.txt
++14 bytes will be sent
+>send send
+ERROR: Invalid Arguments
+Usage: SEND
+>stop stop
+ERROR: Invalid Arguments
+Usage: STOP
+>done
++Closing connection
+```
 
 ### Test 52
 ```terminal 

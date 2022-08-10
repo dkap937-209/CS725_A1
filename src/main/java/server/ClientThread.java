@@ -138,12 +138,27 @@ public class ClientThread extends Thread {
             }
 
             else if(cmd.startsWith("SEND")){
-//                performSendCommand();
-                res = "+File sent";
-                sendFile = true;
+
+                if(isValidInput(str)){
+                    res = "+File sent";
+                    sendFile = true;
+                }
+                else{
+                    res = "ERROR: Invalid Arguments\n" +
+                            "Usage: SEND";
+                }
+
             }
             else if(cmd.startsWith("STOP")){
-                res = "+File will not be sent";
+
+                if(isValidInput(str)){
+                    res = "+File will not be sent";
+                }
+                else{
+                    res = "ERROR: Invalid Arguments\n" +
+                            "Usage: STOP";
+                }
+
             }
 
             else if(cmd.startsWith("DONE")){
@@ -635,18 +650,26 @@ public class ClientThread extends Thread {
         if(str.length() > 4){
 
             String fileToRetrieve = str.substring(5);
-            String retrievedFilePath = String.format("%s%s/%s", BASE_DIR, currDir, fileToRetrieve);
 
-            if(isAFolder(fileToRetrieve)){
-                res = "-Specifier is not a file";
-            }
-            else if(Files.exists(Path.of(retrievedFilePath))){
-                retrievedFile = new File(retrievedFilePath);
-                res = String.format("+%d bytes will be sent", retrievedFile.length());
+            if(isValidInput(fileToRetrieve)){
+                String retrievedFilePath = String.format("%s%s/%s", BASE_DIR, currDir, fileToRetrieve);
+
+                if(isAFolder(fileToRetrieve)){
+                    res = "-Specifier is not a file";
+                }
+                else if(Files.exists(Path.of(retrievedFilePath))){
+                    retrievedFile = new File(retrievedFilePath);
+                    res = String.format("+%d bytes will be sent", retrievedFile.length());
+                }
+                else{
+                    res = "-File doesn't exist";
+                }
             }
             else{
-                res = "-File doesn't exist";
+                res = "ERROR: Invalid Arguments\n" +
+                        "Usage: RETR file-spec";
             }
+
         }
     }
 
