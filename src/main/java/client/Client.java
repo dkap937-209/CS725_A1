@@ -6,24 +6,31 @@ import util.ReadChars;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Scanner;
+import java.util.Stack;
 
 public class Client {
+
+    private static Stack<String> outputStack = new Stack<String>();
+    private static Stack<String> inputStack = new Stack<String>();
     public static void main(String[] args){
 
         String response = "";
-        String prevInput = "";
         String input ="";
+        BufferedInputStream buffIn;
         try(Socket socket = new Socket(Connection_Information.SERVER_ADDRESS, Connection_Information.PORT_NUMBER)){
             DataInputStream in = new DataInputStream(socket.getInputStream());
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            buffIn = new BufferedInputStream(socket.getInputStream());
+            inputStack.push(input);
 
             String greeting = ReadChars.readStringIn(in);
             System.out.println(greeting);
 
+
             while(true){
 
-                if(prevInput.equalsIgnoreCase("SEND")){
-
+                if(inputStack.peek().equalsIgnoreCase("SEND")){
                     char[] chars = response.toCharArray();
                     StringBuilder size = new StringBuilder();
 
@@ -32,97 +39,60 @@ public class Client {
                             size.append(c);
                         }
                     }
-//                    int fileSize = (int)Math.pow(2, 30);
 
-//                    int fileSize = 20;
-//                    byte [] b  = new byte [fileSize];
-//                    InputStream is = socket.getInputStream();
-//                    System.out.println("point 1");
-                    FileOutputStream fos = new FileOutputStream("src/main/resources/client_files/file3.txt");
-//                    System.out.println("point 2");
-//                    is.read(b, 0, b.length);
-//                    System.out.println("point 3");
-//                    fos.write(b, 0, b.length);
-//                    System.out.println("Over here");
+                    String filename = getFilename();
+                    FileOutputStream fos = new FileOutputStream("src/main/resources/client_files/"+filename);
+                    BufferedOutputStream bufferedOutStream = new BufferedOutputStream(fos);
+                    buffIn = new BufferedInputStream(socket.getInputStream());
 
-                    int r;
-                    while((r=in.read())!=-1){
-                        fos.write((char)r);
+                    int fileSize = getFileSize();
+                    for (int i = 0; i < fileSize; i++) {
+                        int r = buffIn.read();
+                        bufferedOutStream.write(r);
                     }
-
-
-
+                    bufferedOutStream.close();
                 }
-                else{
-                    /* Send Command to the Server **/
-                    System.out.print(">");
+                /* Send Command to the Server **/
+                System.out.print(">");
+                input = Keyboard.readInput();
+                //Keep polling the input until we receive an input
+                while(input == null){
                     input = Keyboard.readInput();
-                    //Keep polling the input until we receive an input
-                    while(input == null){
-                        input = Keyboard.readInput();
-                    }
-                    int inputLength = input.length();
-                    out.writeInt(inputLength);
-                    out.writeChars(input);
-                    out.flush();
-
-                    //Receiving response from Server
-                    response = ReadChars.readStringIn(in);
-                    System.out.println(response);
-
-                    if(input.equalsIgnoreCase("DONE")){
-                        break;
-                    }
                 }
-//                /* Send Command to the Server **/
-//                System.out.print(">");
-//                String input = Keyboard.readInput();
-//                //Keep polling the input until we receive an input
-//                while(input == null){
-//                    input = Keyboard.readInput();
-//                }
-//                int inputLength = input.length();
-//                out.writeInt(inputLength);
-//                out.writeChars(input);
-//                out.flush();
-//
-//
-////                if(prevInput.equalsIgnoreCase("SEND")){
-////
-////                    char[] chars = response.toCharArray();
-////                    StringBuilder size = new StringBuilder();
-////
-////                    for(char c: chars){
-////                        if(Character.isDigit(c)){
-////                            size.append(c);
-////                        }
-////                    }
-////
-////                    int fileSize = Integer.parseInt(size.toString());
-////                    byte [] b  = new byte [fileSize];
-////                    InputStream is = socket.getInputStream();
-////                    FileOutputStream fos = new FileOutputStream("src/main/resources/client_files/file3.txt");
-////                    is.read(b, 0, b.length);
-////                    fos.write(b, 0, b.length);
-////
-////                }
-//
-//                //Receiving response from Server
-//                response = ReadChars.readStringIn(in);
-//                System.out.println(response);
-//
-//
-//
-//                if(input.equalsIgnoreCase("DONE")){
-//                    break;
-//                }
+                int inputLength = input.length();
+                out.writeInt(inputLength);
+                out.writeChars(input);
+                out.flush();
+                inputStack.push(input);
 
-                prevInput = input;
+                //Receiving response from Server
+                response = ReadChars.readStringIn(in);
+                System.out.println(response);
+                outputStack.push(response);
+
+                if(input.equalsIgnoreCase("DONE")){
+                    break;
+                }
             }
         }
         catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public static int getFileSize(){
+        outputStack.pop();
+        String outputSizeMsg = outputStack.pop();
+        String[] split = outputSizeMsg.split(" ");
+        return Integer.parseInt(split[0]);
+    }
+
+    public static String getFilename(){
+        inputStack.pop();
+        String fileNameCmd = inputStack.pop();
+        String fileNameDir = fileNameCmd.split(" ")[1];
+        String s[] = fileNameDir.split("/");
+        return s[s.length-1];
     }
 
 

@@ -10,6 +10,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Scanner;
 
 public class ClientThread extends Thread {
 //public class ClientThread implements Runnable {
@@ -76,25 +77,29 @@ public class ClientThread extends Thread {
 
 
         while(true){
-            //Reading the input sent from the client
-            str = ReadChars.readStringIn(in);
-            parser = new JSONParser();
-            res = "";
+//            //Reading the input sent from the client
+//            str = ReadChars.readStringIn(in);
+//            parser = new JSONParser();
+//            res = "";
+
 
             if(sendFile){
                 try {
 
+                    byte[] bytes = new byte[(int)retrievedFile.length()];
                     FileInputStream fis = new FileInputStream(retrievedFile);
-//                    byte[] b = new byte[(int)retrievedFile.length()];
-//                    fis.read(b, 0, b.length);
-//                    OutputStream os = socket.getOutputStream();
-//                    os.write(b,0,b.length);
-//                    os.write(b, 0, b.length);
+                    BufferedInputStream bufferedInStream = new BufferedInputStream(new FileInputStream(retrievedFile));
+                    int content = 0;
+                    //read the file and write to buffer byte by byte
 
-                    int r;
-                    while((r=fis.read())!=-1){
-                        out.write(r);
+                    System.out.println("Sending file");
+                    while ((content = bufferedInStream.read(bytes)) >= 0) {
+                        System.out.println("Content value: "+content);
+                        out.write(bytes, 0, content);
                     }
+                    bufferedInStream.close();
+                    fis.close();
+                    out.flush();
 
                     sendFile = false;
                     continue;
@@ -103,6 +108,11 @@ public class ClientThread extends Thread {
                     throw new RuntimeException(e);
                 }
             }
+
+            //Reading the input sent from the client
+            str = ReadChars.readStringIn(in);
+            parser = new JSONParser();
+            res = "";
 
             cmd = str.substring(0, 4);
             cmd = cmd.toUpperCase();
