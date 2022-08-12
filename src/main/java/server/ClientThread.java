@@ -55,6 +55,9 @@ public class ClientThread extends Thread {
             fos.write(renameFileData.getBytes());
             fos.flush();
 
+            File file = new File("src/main/resources/server_files/user_files/user1/fromClient.txt");
+            file.delete();
+
             fos.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -703,6 +706,7 @@ public class ClientThread extends Thread {
             String fileName = str.substring(9);
             filePath = String.format("%s/%s", currDir, fileName);
             String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
+            System.out.println("GEN "+ gen);
             switch(gen){
 
                 case "NEW":
@@ -722,6 +726,19 @@ public class ClientThread extends Thread {
                     break;
 
                 case "OLD":
+
+                    if(Files.exists(Path.of(fileDir))){
+
+                    }
+                    else{
+                        res = "+Will create new file";
+                        try {
+                            fos = new FileOutputStream(fileDir);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
                     break;
 
                 case "APP":
