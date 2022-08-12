@@ -742,6 +742,17 @@ public class ClientThread extends Thread {
                     break;
 
                 case "APP":
+                    if(Files.exists(Path.of(fileDir))){
+
+                    }
+                    else{
+                        res = "+Will create new file";
+                        try {
+                            fos = new FileOutputStream(fileDir);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                     break;
             }
 

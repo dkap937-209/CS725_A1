@@ -610,6 +610,20 @@ Successfully connected to localhost on port 6789
 +Closing connection
 ```
 
+### Test 47 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor app fromClient.txt
++Will create new file
+>size 28
++Saved user1/fromClient.txt
+>done
++Closing connection
+```
+
 ### Test 52
 ```terminal 
 Successfully connected to localhost on port 6789
