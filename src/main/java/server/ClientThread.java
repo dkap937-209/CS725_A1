@@ -704,56 +704,62 @@ public class ClientThread extends Thread {
         if(str.length()>4){
             String gen = str.substring(5, 8).toUpperCase();
             String fileName = str.substring(9);
-            filePath = String.format("%s/%s", currDir, fileName);
-            String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
-            System.out.println("GEN "+ gen);
-            switch(gen){
 
-                case "NEW":
+            if(isAFolder(fileName)){
+                res = "ERROR: Specifier is not a file";
+            }
+            else{
+                filePath = String.format("%s/%s", currDir, fileName);
+                String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
+                System.out.println("GEN "+ gen);
+                switch(gen){
 
-                    if(Files.exists(Path.of(fileDir))){
+                    case "NEW":
 
-                    }
-                    else{
-                        res = "+File does not exist, will create new file";
-                        try {
-                            fos = new FileOutputStream(fileDir);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        if(Files.exists(Path.of(fileDir))){
+
                         }
-                    }
-
-                    break;
-
-                case "OLD":
-
-                    if(Files.exists(Path.of(fileDir))){
-
-                    }
-                    else{
-                        res = "+Will create new file";
-                        try {
-                            fos = new FileOutputStream(fileDir);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        else{
+                            res = "+File does not exist, will create new file";
+                            try {
+                                fos = new FileOutputStream(fileDir);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
-                    }
 
-                    break;
+                        break;
 
-                case "APP":
-                    if(Files.exists(Path.of(fileDir))){
+                    case "OLD":
 
-                    }
-                    else{
-                        res = "+Will create new file";
-                        try {
-                            fos = new FileOutputStream(fileDir);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        if(Files.exists(Path.of(fileDir))){
+
                         }
-                    }
-                    break;
+                        else{
+                            res = "+Will create new file";
+                            try {
+                                fos = new FileOutputStream(fileDir);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        break;
+
+                    case "APP":
+                        if(Files.exists(Path.of(fileDir))){
+
+                        }
+                        else{
+                            res = "+Will create new file";
+                            try {
+                                fos = new FileOutputStream(fileDir);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        break;
+                }
             }
 
         }
