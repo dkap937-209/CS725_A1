@@ -510,6 +510,20 @@ Usage: DONE
 +Closing connection
 ```
 
+### Test 38
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>retr file.txt
++14 bytes will be sent
+>send
++File sent
+>done
++Closing connection
+```
+
 ### Test 39 
 ```terminal 
 Successfully connected to localhost on port 6789
@@ -564,6 +578,20 @@ Usage: SEND
 >stop stop
 ERROR: Invalid Arguments
 Usage: STOP
+>done
++Closing connection
+```
+
+### Test 43
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor new fromClient.txt
++File does not exist, will create new file
+>size 28
++Saved user1/fromClient.txt
 >done
 +Closing connection
 ```

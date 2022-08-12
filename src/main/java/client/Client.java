@@ -31,15 +31,6 @@ public class Client {
             while(true){
 
                 if(inputStack.peek().equalsIgnoreCase("SEND")){
-                    char[] chars = response.toCharArray();
-                    StringBuilder size = new StringBuilder();
-
-                    for(char c: chars){
-                        if(Character.isDigit(c)){
-                            size.append(c);
-                        }
-                    }
-
                     String filename = getFilename();
                     FileOutputStream fos = new FileOutputStream("src/main/resources/client_files/"+filename);
                     BufferedOutputStream bufferedOutStream = new BufferedOutputStream(fos);
@@ -65,6 +56,28 @@ public class Client {
                 out.flush();
                 inputStack.push(input);
 
+                if(input.toUpperCase().startsWith("SIZE")){
+                    inputStack.pop();
+                    String storCmd = inputStack.pop();
+                    String fileName = storCmd.substring(9);
+                    int fileSize = Integer.parseInt(input.substring(5));
+
+                    String filePath = "src/main/resources/client_files/" + fileName;
+                    File fileToSend = new File(filePath);
+
+                    byte[] bytes = new byte[fileSize];
+                    FileInputStream fis = new FileInputStream(fileToSend);
+                    BufferedInputStream bufferedInStream = new BufferedInputStream(new FileInputStream(fileToSend));
+                    int content = 0;
+                    //read the file and write to buffer byte by byte
+
+                    while ((content = bufferedInStream.read(bytes)) >= 0) {
+                        out.write(bytes, 0, content);
+                    }
+                    bufferedInStream.close();
+                    fis.close();
+                    out.flush();
+                }
                 //Receiving response from Server
                 response = ReadChars.readStringIn(in);
                 System.out.println(response);

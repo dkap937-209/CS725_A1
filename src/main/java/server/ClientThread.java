@@ -165,6 +165,15 @@ public class ClientThread extends Thread {
                 }
 
             }
+
+            else if(cmd.startsWith("STOR")){
+                performStoreCommand();
+            }
+
+            else if(cmd.startsWith("SIZE")){
+                performSizeCommand();
+            }
+
             else if(cmd.startsWith("STOP")){
 
                 if(isValidInput(str)){
@@ -201,8 +210,6 @@ public class ClientThread extends Thread {
             sendMessageToClient(res, out);
         }
     }
-
-
 
     /**
      * Retrieve the cummulative size of the files within a folder
@@ -688,5 +695,65 @@ public class ClientThread extends Thread {
 
         }
     }
+
+    private void performStoreCommand() {
+
+        if(str.length()>4){
+            String gen = str.substring(5, 8).toUpperCase();
+            String fileName = str.substring(9);
+            filePath = String.format("%s/%s", currDir, fileName);
+            String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
+            switch(gen){
+
+                case "NEW":
+
+                    if(Files.exists(Path.of(fileDir))){
+
+                    }
+                    else{
+                        res = "+File does not exist, will create new file";
+                        try {
+                            fos = new FileOutputStream(fileDir);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    break;
+
+                case "OLD":
+                    break;
+
+                case "APP":
+                    break;
+            }
+
+        }
+    }
+
+    private void performSizeCommand() {
+
+        if(str.length()>4){
+
+            int size = Integer.parseInt(str.substring(5));
+
+            BufferedOutputStream bufferedOutStream = new BufferedOutputStream(fos);
+            BufferedInputStream buffIn = new BufferedInputStream(in);
+
+            try{
+                for (int i = 0; i < size; i++) {
+                    int r = buffIn.read();
+                    bufferedOutStream.write(r);
+                }
+                bufferedOutStream.close();
+                bufferedOutStream.flush();
+                res = String.format("+Saved %s", filePath);
+            }
+            catch(IOException e){
+            }
+
+        }
+    }
+
 
 }
