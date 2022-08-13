@@ -220,13 +220,13 @@ Successfully connected to localhost on port 6789
 !user1 logged in
 >list v
 +user1/
-Name: delete.txt Path: user1/delete.txt Size: 16
-Name: file.txt Path: user1/file.txt Size: 14
-Name: file2.txt Path: user1/file2.txt Size: 14
-Name: rename.txt Path: user1/rename.txt Size: 16
-Name: temp Path: user1/temp Size: 17928
-Name: user1.jpg Path: user1/user1.jpg Size: 0
-Name: user1.txt Path: user1/user1.txt Size: 1628
+Name: delete.txt Path: user1/delete.txt Size: 16 Bytes
+Name: file.txt Path: user1/file.txt Size: 14 Bytes
+Name: file2.txt Path: user1/file2.txt Size: 14 Bytes
+Name: rename.txt Path: user1/rename.txt Size: 16 Bytes
+Name: temp Path: user1/temp Size: 17928 Bytes
+Name: user1.jpg Path: user1/user1.jpg Size: 0 Bytes
+Name: user1.txt Path: user1/user1.txt Size: 1628 Bytes
 >done
 +Closing connection
 ```
@@ -592,6 +592,20 @@ Successfully connected to localhost on port 6789
 +File does not exist, will create new file
 >size 28
 +Saved user1/fromClient.txt
+>done
++Closing connection
+```
+
+### Test 44 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor new file2.txt
++File exists, will create new generation of file
+>size 31
++Saved user1/file3.txt
 >done
 +Closing connection
 ```

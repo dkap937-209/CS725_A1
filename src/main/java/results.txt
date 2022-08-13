@@ -360,9 +360,9 @@ Successfully connected to localhost on port 6789
 >name rename.txt
 +File exists
 >tobe new.txt
-user1/rename.txt renamed to user1/new.txt
+
 >kill new.txt
-+user1/new.txt deleted
+-Not deleted because user1/new.txt does not exist
 >done
 +Closing connection
 
@@ -487,13 +487,22 @@ Successfully connected to localhost on port 6789
 +File does not exist, will create new file
 >size 28
 
+Test 44
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor new file2.txt
++File exists, will create new generation of file
+>size 31
+
 Test 45
 Successfully connected to localhost on port 6789
 +RFC 913 SFTP Server
 >user user1
 !user1 logged in
 >stor old fromClient.txt
-+Will create new file
+
 >size 28
 
 Test 52

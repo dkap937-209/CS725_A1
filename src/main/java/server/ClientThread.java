@@ -58,7 +58,7 @@ public class ClientThread extends Thread {
             File file = new File("src/main/resources/server_files/user_files/user1/fromClient.txt");
             file.delete();
 
-            fos.close();
+//            fos.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -100,8 +100,8 @@ public class ClientThread extends Thread {
                         System.out.println("Content value: "+content);
                         out.write(bytes, 0, content);
                     }
-                    bufferedInStream.close();
-                    fis.close();
+//                    bufferedInStream.close();
+//                    fis.close();
                     out.flush();
 
                     sendFile = false;
@@ -702,65 +702,128 @@ public class ClientThread extends Thread {
     private void performStoreCommand() {
 
         if(str.length()>4){
-            String gen = str.substring(5, 8).toUpperCase();
-            String fileName = str.substring(9);
 
-            if(isAFolder(fileName)){
-                res = "ERROR: Specifier is not a file";
-            }
-            else{
-                filePath = String.format("%s/%s", currDir, fileName);
-                String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
-                System.out.println("GEN "+ gen);
-                switch(gen){
-
-                    case "NEW":
-
-                        if(Files.exists(Path.of(fileDir))){
-
-                        }
-                        else{
-                            res = "+File does not exist, will create new file";
-                            try {
-                                fos = new FileOutputStream(fileDir);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-
-                        break;
-
-                    case "OLD":
-
-                        if(Files.exists(Path.of(fileDir))){
-
-                        }
-                        else{
-                            res = "+Will create new file";
-                            try {
-                                fos = new FileOutputStream(fileDir);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-
-                        break;
-
-                    case "APP":
-                        if(Files.exists(Path.of(fileDir))){
-
-                        }
-                        else{
-                            res = "+Will create new file";
-                            try {
-                                fos = new FileOutputStream(fileDir);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                        break;
+            try{
+                String gen = str.substring(5, 8).toUpperCase();
+                String fileName = str.substring(9);
+                if(!isValidInput(fileName) || !isValidInput(gen)){
+                    System.out.println("Inside here");
+                    res = "ERROR: Invalid Arguments\n" +
+                            "Usage: STOR { NEW | OLD | APP } file-spec";
                 }
+                else if(isAFolder(fileName)){
+                    res = "ERROR: Specifier is not a file";
+                }
+                else{
+                    filePath = String.format("%s/%s", currDir, fileName);
+                    String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
+                    switch(gen){
+
+                        case "NEW":
+
+                            if(Files.exists(Path.of(fileDir))){
+                                res = "+File exists, will create new generation of file";
+                                String folderDir = String.format("%s%s", BASE_DIR, currDir);
+                                boolean unique = false;
+
+                                //Get the file extension including .
+                                int len = fileName.length();
+                                StringBuilder fileExtensionBuilder = new StringBuilder();
+                                for(int i=len-1; i>len-5; i--){
+                                    fileExtensionBuilder.append(fileName.charAt(i));
+                                }
+
+                                String fileExtension = fileExtensionBuilder.reverse().toString();
+                                String file = fileName.split("\\.")[0];
+                                System.out.println(file);
+
+                                //add a number to the filename
+
+                                //This doesn't take into account if it ends in double digit num
+                                if(!Character.isDigit(file.charAt(file.length()-1))){
+                                    file += "1";
+                                }
+
+
+                                while(!unique){
+                                    String checkDir = String.format("%s/%s", folderDir, file+fileExtension);
+                                    if(Files.exists(Path.of(checkDir))){
+                                        //Increment file number
+                                        String num = file.replaceAll("[^0-9]", "");
+                                        int newFileNum = Integer.parseInt(num) + 1;
+                                        StringBuilder builder = new StringBuilder(file);
+                                        builder.deleteCharAt(builder.length()-1); //This shouldd be removing the numbers
+                                        builder.append(newFileNum);
+                                        file = builder.toString();
+                                    }
+                                    else{
+                                        //Make new file
+                                        filePath = checkDir;
+                                        File newFile = new File(checkDir);
+                                        newFile.createNewFile();
+                                        System.out.println(checkDir);
+                                        unique = true;
+                                    }
+                                }
+
+                            }
+                            else{
+                                res = "+File does not exist, will create new file";
+                                try {
+                                    fos = new FileOutputStream(fileDir);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+
+                            break;
+
+                        case "OLD":
+
+                            if(Files.exists(Path.of(fileDir))){
+
+                            }
+                            else{
+                                res = "+Will create new file";
+                                try {
+                                    fos = new FileOutputStream(fileDir);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+
+                            break;
+
+                        case "APP":
+                            if(Files.exists(Path.of(fileDir))){
+
+                            }
+                            else{
+                                res = "+Will create new file";
+                                try {
+                                    fos = new FileOutputStream(fileDir);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                            break;
+
+                        default:
+                            System.out.println("Here in default");
+                            res = "ERROR: Invalid Arguments\n" +
+                                    "Usage: STOR { NEW | OLD | APP } file-spec";
+                    }
+                }
+
             }
+            catch(IndexOutOfBoundsException | IOException e){
+                System.out.println("Exception occ");
+                res = "ERROR: Invalid Arguments\n" +
+                        "Usage: STOR { NEW | OLD | APP } file-spec";
+            }
+
+
+
 
         }
     }
@@ -768,24 +831,31 @@ public class ClientThread extends Thread {
     private void performSizeCommand() {
 
         if(str.length()>4){
+            String size = str.substring(5);
 
-            int size = Integer.parseInt(str.substring(5));
+            if(!isValidInput(size)){
+                res = "ERROR: Invalid Arguments\n" +
+                        "Usage: SIZE number-of-bytes-in-file";
+            }
+            else{
 
-            BufferedOutputStream bufferedOutStream = new BufferedOutputStream(fos);
-            BufferedInputStream buffIn = new BufferedInputStream(in);
+                //Retrieve the file from the client side
+                try{
+                    fos = new FileOutputStream(filePath);
+                    BufferedOutputStream bufferedOutStream = new BufferedOutputStream(fos);
+                    BufferedInputStream buffIn = new BufferedInputStream(in);
 
-            try{
-                for (int i = 0; i < size; i++) {
-                    int r = buffIn.read();
-                    bufferedOutStream.write(r);
+                    //Write the information to the new file on the server side
+                    for (int i = 0; i < Integer.parseInt(size); i++) {
+                        int r = buffIn.read();
+                        bufferedOutStream.write(r);
+                    }
+                    bufferedOutStream.flush();
+                    res = String.format("+Saved %s", filePath.substring(BASE_DIR.length()));
                 }
-                bufferedOutStream.close();
-                bufferedOutStream.flush();
-                res = String.format("+Saved %s", filePath);
+                catch(IOException e){
+                }
             }
-            catch(IOException e){
-            }
-
         }
     }
 

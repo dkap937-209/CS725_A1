@@ -175,10 +175,10 @@ echo "Test 43" >> results.txt
 { echo "user user1"; echo "stor new fromClient.txt"; echo "size 28"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 44" >> results.txt
-#{ echo "user user1"; echo "stor new file.txt"; echo "size 8"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+echo "Test 44" >> results.txt
+{ echo "user user1"; echo "stor new file2.txt"; echo "size 31"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 echo "Test 45" >> results.txt
 { echo "user user1"; echo "stor old fromClient.txt"; echo "size 28"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
