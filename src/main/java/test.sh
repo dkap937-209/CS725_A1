@@ -183,14 +183,14 @@ echo "Test 45" >> results.txt
 { echo "user user1"; echo "stor old fromClient.txt"; echo "size 28"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 46" >> results.txt
-#{ echo "user user1"; echo "stor old file.txt"; echo "size 8"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
-#echo "Test 47" >> results.txt
-#{ echo "user user1"; echo "stor app file.txt"; echo "size 8"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+echo "Test 46" >> results.txt
+{ echo "user user1"; echo "stor old file2.txt"; echo "size 31"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
+echo "Test 47" >> results.txt
+{ echo "user user1"; echo "stor app fromClient.txt"; echo "size 28"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 48" >> results.txt
 #{ echo "user user1"; echo "stor app file.txt"; echo "size 8"; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt
@@ -198,11 +198,11 @@ echo "">> results.txt
 #echo "Test 49" >> results.txt
 #{ echo "user user1"; echo "stor new fake.txt"; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt
-#
-#echo "Test 50" >> results.txt
-#{ echo "user user1"; echo "stor new client"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+
+echo "Test 50" >> results.txt
+{ echo "user user1"; echo "stor new client"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 #echo "Test 51" >> results.txt
 #{ echo "user user1"; echo "stor app file.txt file.txt"; echo "stor a"; echo "stor app file.txt"; echo "size 8 8"; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt

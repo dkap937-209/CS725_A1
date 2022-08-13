@@ -45,6 +45,7 @@ public class ClientThread extends Thread {
 
         String delteFileData = "DELETE THIS FILE";
         String renameFileData = "RENAME THIS FILE";
+        String file2txt = "THIS IS FILE 2";
 
         try {
             fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/delete.txt");
@@ -55,10 +56,13 @@ public class ClientThread extends Thread {
             fos.write(renameFileData.getBytes());
             fos.flush();
 
+            fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/file2.txt");
+            fos.write(file2txt.getBytes());
+            fos.flush();
+
             File file = new File("src/main/resources/server_files/user_files/user1/fromClient.txt");
             file.delete();
 
-//            fos.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -95,13 +99,10 @@ public class ClientThread extends Thread {
                     int content = 0;
                     //read the file and write to buffer byte by byte
 
-                    System.out.println("Sending file");
                     while ((content = bufferedInStream.read(bytes)) >= 0) {
-                        System.out.println("Content value: "+content);
                         out.write(bytes, 0, content);
                     }
-//                    bufferedInStream.close();
-//                    fis.close();
+
                     out.flush();
 
                     sendFile = false;
@@ -717,11 +718,12 @@ public class ClientThread extends Thread {
                 else{
                     filePath = String.format("%s/%s", currDir, fileName);
                     String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
+                    Path path = Path.of(fileDir);
                     switch(gen){
 
                         case "NEW":
 
-                            if(Files.exists(Path.of(fileDir))){
+                            if(Files.exists(path)){
                                 res = "+File exists, will create new generation of file";
                                 String folderDir = String.format("%s%s", BASE_DIR, currDir);
                                 boolean unique = false;
@@ -780,8 +782,9 @@ public class ClientThread extends Thread {
 
                         case "OLD":
 
-                            if(Files.exists(Path.of(fileDir))){
-
+                            if(Files.exists(path)){
+                                filePath = String.valueOf(path);
+                                res = "+Will write over old file";
                             }
                             else{
                                 res = "+Will create new file";
@@ -795,7 +798,7 @@ public class ClientThread extends Thread {
                             break;
 
                         case "APP":
-                            if(Files.exists(Path.of(fileDir))){
+                            if(Files.exists(path)){
 
                             }
                             else{
@@ -821,10 +824,6 @@ public class ClientThread extends Thread {
                 res = "ERROR: Invalid Arguments\n" +
                         "Usage: STOR { NEW | OLD | APP } file-spec";
             }
-
-
-
-
         }
     }
 

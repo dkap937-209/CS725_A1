@@ -502,8 +502,36 @@ Successfully connected to localhost on port 6789
 >user user1
 !user1 logged in
 >stor old fromClient.txt
-
++Will write over old file
 >size 28
+
+Test 46
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor old file2.txt
++Will write over old file
+>size 31
+
+Test 47
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor app file.txt
+
+>size 8
+
+Test 50
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor new client
+ERROR: Specifier is not a file
+>done
++Closing connection
 
 Test 52
 Successfully connected to localhost on port 6789
