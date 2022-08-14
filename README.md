@@ -690,6 +690,27 @@ ERROR: Specifier is not a file
 +Closing connection
 ```
 
+### Test 51 
+```terminal 
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor app file2.txt file2.txt
+ERROR: Invalid Arguments
+Usage: STOR { NEW | OLD | APP } file-spec
+>stor a
+ERROR: Invalid Arguments
+Usage: STOR { NEW | OLD | APP } file-spec
+>stor app file2.txt
++Will append to file
+>size 31 31
+ERROR: Invalid Arguments
+Usage: SIZE number-of-bytes-in-file
+>done
++Closing connection
+```
+
 ### Test 52
 ```terminal 
 Successfully connected to localhost on port 6789

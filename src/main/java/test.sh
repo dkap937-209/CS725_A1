@@ -203,9 +203,9 @@ echo "Test 50" >> results.txt
 { echo "user user1"; echo "stor new client"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 51" >> results.txt
-#{ echo "user user1"; echo "stor app file.txt file.txt"; echo "stor a"; echo "stor app file.txt"; echo "size 8 8"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
+echo "Test 51" >> results.txt
+{ echo "user user1"; echo "stor app file2.txt file2.txt"; echo "stor a"; echo "stor app file2.txt"; echo "size 31 31"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
 
 echo "Test 52" >> results.txt
 { echo "type a"; echo "list f"; echo "name rename.txt"; echo "done";} | java client/Client.java >> results.txt

@@ -57,10 +57,11 @@ public class Client {
                 out.flush();
                 inputStack.push(input);
 
-                if(input.toUpperCase().startsWith("SIZE")){
+                if(input.toUpperCase().startsWith("SIZE") && input.split(" ").length<2){
                     inputStack.pop();
                     String storCmd = inputStack.pop();
                     String fileName = storCmd.substring(9);
+                    String size = input.substring(5);
                     int fileSize = Integer.parseInt(input.substring(5));
 
                     String filePath = "src/main/resources/client_files/" + fileName;

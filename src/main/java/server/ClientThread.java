@@ -359,7 +359,6 @@ public class ClientThread extends Thread {
                     }
 
                     if(!found){
-                        System.out.println("Account is invalid");
                         res = "-Invalid account, try again";
                     }
 
@@ -710,14 +709,12 @@ public class ClientThread extends Thread {
                 String gen = str.substring(5, 8).toUpperCase();
                 String fileName = str.substring(9);
                 if(!isValidInput(fileName) || !isValidInput(gen)){
-                    System.out.println("Inside here");
                     res = "ERROR: Invalid Arguments\n" +
                             "Usage: STOR { NEW | OLD | APP } file-spec";
                 }
                 else if(isAFolder(fileName)){
                     res = "ERROR: Specifier is not a file";
                 }
-                //TODO: have an else if statement that checks if the client has that file(Test case 49)
                 else{
 
                     //Check if the user has the file they wish to store
@@ -744,7 +741,6 @@ public class ClientThread extends Thread {
 
                                     String fileExtension = fileExtensionBuilder.reverse().toString();
                                     String file = fileName.split("\\.")[0];
-                                    System.out.println(file);
 
                                     //add a number to the filename
 
@@ -770,7 +766,6 @@ public class ClientThread extends Thread {
                                             filePath = checkDir;
                                             File newFile = new File(checkDir);
                                             newFile.createNewFile();
-                                            System.out.println(checkDir);
                                             unique = true;
                                         }
                                     }
@@ -821,7 +816,6 @@ public class ClientThread extends Thread {
                                 break;
 
                             default:
-                                System.out.println("Here in default");
                                 res = "ERROR: Invalid Arguments\n" +
                                         "Usage: STOR { NEW | OLD | APP } file-spec";
                         }
@@ -835,7 +829,6 @@ public class ClientThread extends Thread {
 
             }
             catch(IndexOutOfBoundsException | IOException e){
-                System.out.println("Exception occ");
                 res = "ERROR: Invalid Arguments\n" +
                         "Usage: STOR { NEW | OLD | APP } file-spec";
             }

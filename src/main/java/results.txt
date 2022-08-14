@@ -489,6 +489,9 @@ Successfully connected to localhost on port 6789
 +File does not exist, will create new file
 >size 28
 
+>done
++Closing connection
+
 Test 44
 Successfully connected to localhost on port 6789
 +RFC 913 SFTP Server
@@ -498,80 +501,4 @@ Successfully connected to localhost on port 6789
 +File exists, will create new generation of file
 >size 31
 
-Test 45
-Successfully connected to localhost on port 6789
-+RFC 913 SFTP Server
->user user1
-!user1 logged in
->stor old fromClient.txt
-+Will write over old file
->size 28
-
-Test 46
-Successfully connected to localhost on port 6789
-+RFC 913 SFTP Server
->user user1
-!user1 logged in
->stor old file2.txt
-+Will write over old file
->size 31
-
-Test 47
-Successfully connected to localhost on port 6789
-+RFC 913 SFTP Server
->user user1
-!user1 logged in
->stor app fromClient.txt
-+Will append to file
->size 28
-
-Test 48
-Successfully connected to localhost on port 6789
-+RFC 913 SFTP Server
->user user1
-!user1 logged in
->stor app file2.txt
-+Will append to file
->size 31
-
-Test 49
-Successfully connected to localhost on port 6789
-+RFC 913 SFTP Server
->user user1
-!user1 logged in
->stor new fake.txt
-ERROR: File doesn't exist
 >done
-+Closing connection
-
-Test 50
-Successfully connected to localhost on port 6789
-+RFC 913 SFTP Server
->user user1
-!user1 logged in
->stor new client
-ERROR: Specifier is not a file
->done
-+Closing connection
-
-Test 52
-Successfully connected to localhost on port 6789
-+RFC 913 SFTP Server
->type a
--Please log in first
->list f
--Please log in first
->name rename.txt
--Please log in first
->done
-+Closing connection
-
-Test 53
-Successfully connected to localhost on port 6789
-+RFC 913 SFTP Server
->unknown
-ERROR: Invalid Command
-Available Commands: "USER", "ACCT", "PASS", "TYPE", "LIST", "CDIR", "KILL", "NAME", "TOBE", "DONE", "RETR", "SEND", "STOP", "STOR", "SIZE"
->done
-+Closing connection
-
