@@ -40,6 +40,7 @@ public class ClientThread extends Thread {
     private DataInputStream in = null;
     private DataOutputStream out = null;
     private boolean sendFile = false;
+    private boolean appendToFile = false;
     public ClientThread(Socket clientSocket) {
         System.out.println("New client thread made");
         this.socket = clientSocket;
@@ -805,7 +806,9 @@ public class ClientThread extends Thread {
 
                             case "APP":
                                 if(Files.exists(path)){
-
+                                    filePath = String.valueOf(path);
+                                    res = "+Will append to file";
+                                    appendToFile = true;
                                 }
                                 else{
                                     res = "+Will create new file";
@@ -852,7 +855,7 @@ public class ClientThread extends Thread {
 
                 //Retrieve the file from the client side
                 try{
-                    fos = new FileOutputStream(filePath);
+                    fos = new FileOutputStream(filePath, appendToFile);
                     BufferedOutputStream bufferedOutStream = new BufferedOutputStream(fos);
                     BufferedInputStream buffIn = new BufferedInputStream(in);
 
@@ -863,6 +866,7 @@ public class ClientThread extends Thread {
                     }
                     bufferedOutStream.flush();
                     res = String.format("+Saved %s", filePath.substring(BASE_DIR.length()));
+                    appendToFile = false;
                 }
                 catch(IOException e){
                 }

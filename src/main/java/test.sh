@@ -191,10 +191,10 @@ echo "Test 47" >> results.txt
 { echo "user user1"; echo "stor app fromClient.txt"; echo "size 28"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
-#echo "Test 48" >> results.txt
-#{ echo "user user1"; echo "stor app file.txt"; echo "size 8"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
-#
+echo "Test 48" >> results.txt
+{ echo "user user1"; echo "stor app file2.txt"; echo "size 31"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
+
 echo "Test 49" >> results.txt
 { echo "user user1"; echo "stor new fake.txt"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
