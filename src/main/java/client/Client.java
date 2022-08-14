@@ -50,6 +50,7 @@ public class Client {
                 while(input == null){
                     input = Keyboard.readInput();
                 }
+
                 int inputLength = input.length();
                 out.writeInt(inputLength);
                 out.writeChars(input);
@@ -78,6 +79,7 @@ public class Client {
                     fis.close();
                     out.flush();
                 }
+
                 //Receiving response from Server
                 response = ReadChars.readStringIn(in);
                 System.out.println(response);

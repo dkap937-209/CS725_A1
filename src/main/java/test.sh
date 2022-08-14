@@ -195,9 +195,9 @@ echo "">> results.txt
 #{ echo "user user1"; echo "stor app file.txt"; echo "size 8"; echo "done";} | java client/Client.java >> results.txt
 #echo "">> results.txt
 #
-#echo "Test 49" >> results.txt
-#{ echo "user user1"; echo "stor new fake.txt"; echo "done";} | java client/Client.java >> results.txt
-#echo "">> results.txt
+echo "Test 49" >> results.txt
+{ echo "user user1"; echo "stor new fake.txt"; echo "done";} | java client/Client.java >> results.txt
+echo "">> results.txt
 
 echo "Test 50" >> results.txt
 { echo "user user1"; echo "stor new client"; echo "done";} | java client/Client.java >> results.txt

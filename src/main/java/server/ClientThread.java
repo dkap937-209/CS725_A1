@@ -16,6 +16,7 @@ public class ClientThread extends Thread {
 //public class ClientThread implements Runnable {
     protected Socket socket;
     private  final String BASE_DIR = "src/main/resources/server_files/user_files/";
+    private final String USER_FILES = "src/main/resources/client_files/";
     private static String user = null;
     private static String password = null;
     private boolean loggedIn = false;
@@ -715,107 +716,118 @@ public class ClientThread extends Thread {
                 else if(isAFolder(fileName)){
                     res = "ERROR: Specifier is not a file";
                 }
+                //TODO: have an else if statement that checks if the client has that file(Test case 49)
                 else{
-                    filePath = String.format("%s/%s", currDir, fileName);
-                    String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
-                    Path path = Path.of(fileDir);
-                    switch(gen){
 
-                        case "NEW":
+                    //Check if the user has the file they wish to store
+                    String userFilePath = String.format("%s%s", USER_FILES, fileName);
+                    if(Files.exists(Path.of(userFilePath))){
+                        filePath = String.format("%s/%s", currDir, fileName);
+                        String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
+                        Path path = Path.of(fileDir);
+                        switch(gen){
 
-                            if(Files.exists(path)){
-                                res = "+File exists, will create new generation of file";
-                                String folderDir = String.format("%s%s", BASE_DIR, currDir);
-                                boolean unique = false;
+                            case "NEW":
 
-                                //Get the file extension including .
-                                int len = fileName.length();
-                                StringBuilder fileExtensionBuilder = new StringBuilder();
-                                for(int i=len-1; i>len-5; i--){
-                                    fileExtensionBuilder.append(fileName.charAt(i));
-                                }
+                                if(Files.exists(path)){
+                                    res = "+File exists, will create new generation of file";
+                                    String folderDir = String.format("%s%s", BASE_DIR, currDir);
+                                    boolean unique = false;
 
-                                String fileExtension = fileExtensionBuilder.reverse().toString();
-                                String file = fileName.split("\\.")[0];
-                                System.out.println(file);
-
-                                //add a number to the filename
-
-                                //This doesn't take into account if it ends in double digit num
-                                if(!Character.isDigit(file.charAt(file.length()-1))){
-                                    file += "1";
-                                }
-
-
-                                while(!unique){
-                                    String checkDir = String.format("%s/%s", folderDir, file+fileExtension);
-                                    if(Files.exists(Path.of(checkDir))){
-                                        //Increment file number
-                                        String num = file.replaceAll("[^0-9]", "");
-                                        int newFileNum = Integer.parseInt(num) + 1;
-                                        StringBuilder builder = new StringBuilder(file);
-                                        builder.deleteCharAt(builder.length()-1); //This shouldd be removing the numbers
-                                        builder.append(newFileNum);
-                                        file = builder.toString();
+                                    //Get the file extension including .
+                                    int len = fileName.length();
+                                    StringBuilder fileExtensionBuilder = new StringBuilder();
+                                    for(int i=len-1; i>len-5; i--){
+                                        fileExtensionBuilder.append(fileName.charAt(i));
                                     }
-                                    else{
-                                        //Make new file
-                                        filePath = checkDir;
-                                        File newFile = new File(checkDir);
-                                        newFile.createNewFile();
-                                        System.out.println(checkDir);
-                                        unique = true;
+
+                                    String fileExtension = fileExtensionBuilder.reverse().toString();
+                                    String file = fileName.split("\\.")[0];
+                                    System.out.println(file);
+
+                                    //add a number to the filename
+
+                                    //This doesn't take into account if it ends in double digit num
+                                    if(!Character.isDigit(file.charAt(file.length()-1))){
+                                        file += "1";
+                                    }
+
+
+                                    while(!unique){
+                                        String checkDir = String.format("%s/%s", folderDir, file+fileExtension);
+                                        if(Files.exists(Path.of(checkDir))){
+                                            //Increment file number
+                                            String num = file.replaceAll("[^0-9]", "");
+                                            int newFileNum = Integer.parseInt(num) + 1;
+                                            StringBuilder builder = new StringBuilder(file);
+                                            builder.deleteCharAt(builder.length()-1); //This shouldd be removing the numbers
+                                            builder.append(newFileNum);
+                                            file = builder.toString();
+                                        }
+                                        else{
+                                            //Make new file
+                                            filePath = checkDir;
+                                            File newFile = new File(checkDir);
+                                            newFile.createNewFile();
+                                            System.out.println(checkDir);
+                                            unique = true;
+                                        }
+                                    }
+
+                                }
+                                else{
+                                    res = "+File does not exist, will create new file";
+                                    try {
+                                        fos = new FileOutputStream(fileDir);
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
                                     }
                                 }
 
-                            }
-                            else{
-                                res = "+File does not exist, will create new file";
-                                try {
-                                    fos = new FileOutputStream(fileDir);
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
+                                break;
+
+                            case "OLD":
+
+                                if(Files.exists(path)){
+                                    filePath = String.valueOf(path);
+                                    res = "+Will write over old file";
                                 }
-                            }
-
-                            break;
-
-                        case "OLD":
-
-                            if(Files.exists(path)){
-                                filePath = String.valueOf(path);
-                                res = "+Will write over old file";
-                            }
-                            else{
-                                res = "+Will create new file";
-                                try {
-                                    fos = new FileOutputStream(fileDir);
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
+                                else{
+                                    res = "+Will create new file";
+                                    try {
+                                        fos = new FileOutputStream(fileDir);
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                 }
-                            }
 
-                            break;
+                                break;
 
-                        case "APP":
-                            if(Files.exists(path)){
+                            case "APP":
+                                if(Files.exists(path)){
 
-                            }
-                            else{
-                                res = "+Will create new file";
-                                try {
-                                    fos = new FileOutputStream(fileDir);
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
                                 }
-                            }
-                            break;
+                                else{
+                                    res = "+Will create new file";
+                                    try {
+                                        fos = new FileOutputStream(fileDir);
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                                break;
 
-                        default:
-                            System.out.println("Here in default");
-                            res = "ERROR: Invalid Arguments\n" +
-                                    "Usage: STOR { NEW | OLD | APP } file-spec";
+                            default:
+                                System.out.println("Here in default");
+                                res = "ERROR: Invalid Arguments\n" +
+                                        "Usage: STOR { NEW | OLD | APP } file-spec";
+                        }
                     }
+                    else{
+                        res = "ERROR: File doesn't exist";
+                    }
+
+
                 }
 
             }
