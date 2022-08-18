@@ -178,7 +178,7 @@ Successfully connected to localhost on port 6789
 >list v
 +user1/
 Name: delete.txt Path: user1/delete.txt Size: 16 Bytes
-Name: file.txt Path: user1/file.txt Size: 14 Bytes
+Name: file.txt Path: user1/file.txt Size: 30 Bytes
 Name: file2.txt Path: user1/file2.txt Size: 14 Bytes
 Name: file3.txt Path: user1/file3.txt Size: 31 Bytes
 Name: rename.txt Path: user1/rename.txt Size: 16 Bytes
@@ -425,7 +425,7 @@ Successfully connected to localhost on port 6789
 >user user1
 !user1 logged in
 >retr file.txt
-+14 bytes will be sent
++30 bytes will be sent
 >send
 +File sent
 
@@ -435,7 +435,7 @@ Successfully connected to localhost on port 6789
 >user user1
 !user1 logged in
 >retr file.txt
-+14 bytes will be sent
++30 bytes will be sent
 >stop
 +File will not be sent
 >done
@@ -470,7 +470,7 @@ Successfully connected to localhost on port 6789
 ERROR: Invalid Arguments
 Usage: RETR file-spec
 >retr file.txt
-+14 bytes will be sent
++30 bytes will be sent
 >send send
 ERROR: Invalid Arguments
 Usage: SEND

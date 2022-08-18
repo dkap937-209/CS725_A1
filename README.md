@@ -3,8 +3,30 @@
 ## Setup
 Although this implementation is designed to be cross-platform, and will work on any machine, the associated scripts are designed to be run on a windows system.
 
+**Server Setup**
+1. Open the project in IntelliJ 
+2. Run the ```main``` function in ```src/main/java/server/Server.java```
+
+
+**Client Setup**
+
+1. Open a new command prompt
+2. Change directory to the `src/main/java` directory
+3. Execute the 'run' script with `./runClient.sh` to start the client
+4. A message will be displayed stating that the client successfully connected to the server followed by a greeting from the server
+
+***or***
+1. Open the project in IntelliJ
+2. Run the ```main``` function in ```src/main/java/client/Client.java```
+
 
 ## Test cases
+
+_Note: All test cases have been included in ```test.sh```,
+although test requiring file transfer will not work properly.
+Those test can be done manually_
+
+When running ```test.sh``` the output of the test can be found in ```src/main/java/results.txt```
 
 ### Test 1
 ```terminal 
@@ -517,7 +539,7 @@ Successfully connected to localhost on port 6789
 >user user1
 !user1 logged in
 >retr file.txt
-+14 bytes will be sent
++30 bytes will be sent
 >send
 +File sent
 >done
@@ -531,7 +553,7 @@ Successfully connected to localhost on port 6789
 >user user1
 !user1 logged in
 >retr file.txt
-+14 bytes will be sent
++30 bytes will be sent
 >stop
 +File will not be sent
 >done

@@ -30,6 +30,7 @@ public class Client {
 
             while(true){
 
+                //If the previous input was SEND, then prepare to receive a file from the server
                 if(inputStack.peek().equalsIgnoreCase("SEND")){
                     String filename = getFilename();
                     FileOutputStream fos = new FileOutputStream("src/main/resources/client_files/"+filename);
@@ -57,7 +58,8 @@ public class Client {
                 out.flush();
                 inputStack.push(input);
 
-                if(input.toUpperCase().startsWith("SIZE") && input.split(" ").length<2){
+                //If the command is "size" then prepare to send the file to the server
+                if(input.toUpperCase().startsWith("SIZE") && input.split(" ").length<3){
                     inputStack.pop();
                     String storCmd = inputStack.pop();
                     String fileName = storCmd.substring(9);
@@ -72,7 +74,6 @@ public class Client {
                     BufferedInputStream bufferedInStream = new BufferedInputStream(new FileInputStream(fileToSend));
                     int content = 0;
                     //read the file and write to buffer byte by byte
-
                     while ((content = bufferedInStream.read(bytes)) >= 0) {
                         out.write(bytes, 0, content);
                     }
@@ -96,6 +97,11 @@ public class Client {
         }
     }
 
+    /**
+     * Retrieve the size of the file to send from the previous messages
+     *
+     * @return {@link Integer}: Size of the file in bytes
+     */
     public static int getFileSize(){
         outputStack.pop();
         String outputSizeMsg = outputStack.pop();
@@ -103,11 +109,16 @@ public class Client {
         return Integer.parseInt(split[0]);
     }
 
+    /**
+     * Retrieve the name of the file to send to the server from previous inputs
+     *
+     * @return  {@link String}: Name of the file
+     */
     public static String getFilename(){
         inputStack.pop();
         String fileNameCmd = inputStack.pop();
         String fileNameDir = fileNameCmd.split(" ")[1];
-        String s[] = fileNameDir.split("/");
+        String[] s = fileNameDir.split("/");
         return s[s.length-1];
     }
 

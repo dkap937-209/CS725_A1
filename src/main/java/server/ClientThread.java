@@ -10,7 +10,6 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Scanner;
 
 public class ClientThread extends Thread {
 //public class ClientThread implements Runnable {
@@ -41,6 +40,8 @@ public class ClientThread extends Thread {
     private DataOutputStream out = null;
     private boolean sendFile = false;
     private boolean appendToFile = false;
+    private Path path;
+
     public ClientThread(Socket clientSocket) {
         System.out.println("New client thread made");
         this.socket = clientSocket;
@@ -86,27 +87,21 @@ public class ClientThread extends Thread {
 
 
         while(true){
-//            //Reading the input sent from the client
-//            str = ReadChars.readStringIn(in);
-//            parser = new JSONParser();
-//            res = "";
 
-
+            //Send the file if 'send' was the previous command
             if(sendFile){
                 try {
-
                     byte[] bytes = new byte[(int)retrievedFile.length()];
                     FileInputStream fis = new FileInputStream(retrievedFile);
                     BufferedInputStream bufferedInStream = new BufferedInputStream(new FileInputStream(retrievedFile));
                     int content = 0;
-                    //read the file and write to buffer byte by byte
 
+                    //read the file and write to buffer byte by byte
                     while ((content = bufferedInStream.read(bytes)) >= 0) {
                         out.write(bytes, 0, content);
                     }
 
                     out.flush();
-
                     sendFile = false;
                     continue;
 
@@ -181,15 +176,7 @@ public class ClientThread extends Thread {
             }
 
             else if(cmd.startsWith("STOP")){
-
-                if(isValidInput(str)){
-                    res = "+File will not be sent";
-                }
-                else{
-                    res = "ERROR: Invalid Arguments\n" +
-                            "Usage: STOP";
-                }
-
+                res = (isValidInput(str)) ? "+File will not be sent" : "ERROR: Invalid Arguments\n Usage: STOP";
             }
 
             else if(cmd.startsWith("DONE")){
@@ -282,6 +269,8 @@ public class ClientThread extends Thread {
                         "Usage: USER user-id";
             }
             else{
+
+                //Read the JSON file and try to find the username that the user is searching for
                 try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
 
                     //Retrieving value for userID key in json file
@@ -326,6 +315,9 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Handles selecting the account input
+     */
     public void performAccountCommand(){
         if(str.length() > 4){
             String accountName =  str.substring(5);
@@ -335,10 +327,13 @@ public class ClientThread extends Thread {
                         "Usage: ACCT account";
             }
             else{
+
+                //If a username has been specified
                 if(usersAccounts != null){
                     boolean found = false;
                     for(Object o: usersAccounts){
                         String acctName= o.toString();
+
                         if(acctName.equals(accountName)){
                             found = true;
                             selectedAccount = acctName;
@@ -375,7 +370,7 @@ public class ClientThread extends Thread {
                         list = (JSONArray) ids.get("accounts");
                         boolean found = false;
 
-
+                        //Loop through list of all accounts in json file
                         for(Object o: list){
                             JSONObject object = (JSONObject) o;
                             JSONArray acctUsers = (JSONArray) object.get("users");
@@ -383,7 +378,6 @@ public class ClientThread extends Thread {
                             if(object.get("accountName").equals(accountName)){
                                 found = true;
                                 res = "+This message";
-
                                 break;
                             }
                         }
@@ -401,6 +395,10 @@ public class ClientThread extends Thread {
         }
     }
 
+
+    /**
+     * Handle the password command input
+     */
     public void performPasswordCommand(){
         if(str.length() > 4){
 
@@ -411,6 +409,7 @@ public class ClientThread extends Thread {
             }
             else if(pass.equals(password)){
 
+                //Password entered equals the password enetered for a previously specified username
                 passEntered = true;
                 if(numAccounts != 0 && selectedAccount == null){
                     res = "+Send account";
@@ -427,6 +426,7 @@ public class ClientThread extends Thread {
             }
 
             else if(password == null){
+
                 //When no USER command wasn't used before
                 try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
                     Object obj = parser.parse(reader);
@@ -460,7 +460,11 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Handle the list command input
+     */
     public void performListCommand(){
+
         if(!loggedIn){
             res = "-Please log in first";
         }
@@ -473,7 +477,6 @@ public class ClientThread extends Thread {
             }
             else{
                 String specifiedDir = "";
-                //Creating directory string
                 specifiedDir += currDir + ((mode.length()>1) ? String.format("/%s",mode.substring(2)) :"");
                 String dirPath = String.format("%s%s", BASE_DIR, specifiedDir);
                 try{
@@ -516,6 +519,9 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Handle changing the directory command input
+     */
     public void performCDIRCommand(){
         if(!loggedIn){
             res = "-Please log in first";
@@ -533,7 +539,7 @@ public class ClientThread extends Thread {
                     if(Files.exists(Path.of(BASE_DIR+chkDir))){
                         currDir = chkDir;
                         res = (loggedIn) ? String.format("!Changed working dir to %s", currDir) :
-                                "+Directory exists, send account/password";
+                                            "+Directory exists, send account/password";
                         pendingDirChange = true;
                     }
                     else{
@@ -550,6 +556,10 @@ public class ClientThread extends Thread {
             }
         }
     }
+
+    /**
+     * Handles deleting an account
+     */
     public void performKillCommand(){
         if(!loggedIn){
             res = "-Please log in first";
@@ -581,6 +591,9 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Handles renaming a file
+     */
     public void performNameCommand(){
         if(!loggedIn){
             res = "-Please log in first";
@@ -590,18 +603,10 @@ public class ClientThread extends Thread {
 
             if(isValidInput(fileName)){
 
-                //Probably need to make them in global scope of function
                 renamePath = String.format("%s/%s", currDir, fileName);
                 filePath = String.format("%s%s", BASE_DIR, renamePath);
-
-                if(Files.exists(Path.of(filePath))){
-                    res = "+File exists";
-                }
-                else{
-                    res = String.format("Can't find %s", renamePath);
-                }
-
-
+                res = (Files.exists(Path.of(filePath))) ? "+File exists" :
+                                                           String.format("Can't find %s", renamePath);
             }
             else{
                 res = "ERROR: Invalid Arguments\n" +
@@ -611,6 +616,9 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Handles the new name that a file shoudl be renamed to
+     */
     public void performTOBECommand(){
         if(!loggedIn){
             res = "-Please log in first";
@@ -641,6 +649,9 @@ public class ClientThread extends Thread {
 
     }
 
+    /**
+     * Handles the type of communication that should be use
+     */
     public void performTypeCommand(){
         if(!loggedIn){
             res = "-Please log in first";
@@ -660,19 +671,19 @@ public class ClientThread extends Thread {
                 case "c":
                     res = "+Using Continuous mode";
                     break;
+
                 default:
-                    if(isValidInput(type)){
-                        res = "-Type not valid";
-
-                    }else{
-                        res = "ERROR: Invalid Arguments\n" +
-                                "Usage: TYPE { A | B | C }";
-                    }
-
+                    res = isValidInput(type) ? "-Type not valid" :
+                                                "ERROR: Invalid Arguments\n" +
+                                                "Usage: TYPE { A | B | C }";
             }
         }
     }
 
+    /**
+     * Handles the retrieve command and finding the file that the user wishes to retrieve from
+     * the server
+     */
     private void performRetrieveCommand() {
 
         if(str.length() > 4){
@@ -697,17 +708,21 @@ public class ClientThread extends Thread {
                 res = "ERROR: Invalid Arguments\n" +
                         "Usage: RETR file-spec";
             }
-
         }
     }
 
+    /**
+     * Handles retrieving and storing a file from the client side
+     */
     private void performStoreCommand() {
 
         if(str.length()>4){
 
             try{
+                //Get what type of GEN the file should be and check it is valid
                 String gen = str.substring(5, 8).toUpperCase();
                 String fileName = str.substring(9);
+
                 if(!isValidInput(fileName) || !isValidInput(gen)){
                     res = "ERROR: Invalid Arguments\n" +
                             "Usage: STOR { NEW | OLD | APP } file-spec";
@@ -719,14 +734,18 @@ public class ClientThread extends Thread {
 
                     //Check if the user has the file they wish to store
                     String userFilePath = String.format("%s%s", USER_FILES, fileName);
+
                     if(Files.exists(Path.of(userFilePath))){
+
+                        //Creating filepath string to store file on server side
                         filePath = String.format("%s/%s", currDir, fileName);
                         String fileDir = String.format("%s%s/%s", BASE_DIR, currDir, fileName);
-                        Path path = Path.of(fileDir);
+                        path = Path.of(fileDir);
+
                         switch(gen){
 
                             case "NEW":
-
+                                appendToFile = false;
                                 if(Files.exists(path)){
                                     res = "+File exists, will create new generation of file";
                                     String folderDir = String.format("%s%s", BASE_DIR, currDir);
@@ -742,14 +761,11 @@ public class ClientThread extends Thread {
                                     String fileExtension = fileExtensionBuilder.reverse().toString();
                                     String file = fileName.split("\\.")[0];
 
-                                    //add a number to the filename
-
-                                    //This doesn't take into account if it ends in double digit num
                                     if(!Character.isDigit(file.charAt(file.length()-1))){
                                         file += "1";
                                     }
 
-
+                                    //Creating a unique filename
                                     while(!unique){
                                         String checkDir = String.format("%s/%s", folderDir, file+fileExtension);
                                         if(Files.exists(Path.of(checkDir))){
@@ -757,44 +773,37 @@ public class ClientThread extends Thread {
                                             String num = file.replaceAll("[^0-9]", "");
                                             int newFileNum = Integer.parseInt(num) + 1;
                                             StringBuilder builder = new StringBuilder(file);
-                                            builder.deleteCharAt(builder.length()-1); //This shouldd be removing the numbers
+                                            builder.deleteCharAt(builder.length()-1); //TODO: This shouldd be removing the numbers
                                             builder.append(newFileNum);
                                             file = builder.toString();
                                         }
                                         else{
                                             //Make new file
                                             filePath = checkDir;
+                                            path = Path.of(filePath);
                                             File newFile = new File(checkDir);
                                             newFile.createNewFile();
                                             unique = true;
                                         }
                                     }
-
                                 }
                                 else{
                                     res = "+File does not exist, will create new file";
-                                    try {
-                                        fos = new FileOutputStream(fileDir);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
+                                    path = Path.of(fileDir);
+                                    createNewFile(fileDir, fos);
                                 }
 
                                 break;
 
                             case "OLD":
-
+                                appendToFile = false;
                                 if(Files.exists(path)){
                                     filePath = String.valueOf(path);
                                     res = "+Will write over old file";
                                 }
                                 else{
                                     res = "+Will create new file";
-                                    try {
-                                        fos = new FileOutputStream(fileDir);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
+                                    createNewFile(fileDir, fos);
                                 }
 
                                 break;
@@ -807,11 +816,7 @@ public class ClientThread extends Thread {
                                 }
                                 else{
                                     res = "+Will create new file";
-                                    try {
-                                        fos = new FileOutputStream(fileDir);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
+                                    createNewFile(fileDir, fos);
                                 }
                                 break;
 
@@ -835,6 +840,9 @@ public class ClientThread extends Thread {
         }
     }
 
+    /**
+     * Handles the size command that works in tandem with the store command
+     */
     private void performSizeCommand() {
 
         if(str.length()>4){
@@ -848,7 +856,7 @@ public class ClientThread extends Thread {
 
                 //Retrieve the file from the client side
                 try{
-                    fos = new FileOutputStream(filePath, appendToFile);
+                    fos = new FileOutputStream(String.valueOf(path), appendToFile);
                     BufferedOutputStream bufferedOutStream = new BufferedOutputStream(fos);
                     BufferedInputStream buffIn = new BufferedInputStream(in);
 
@@ -858,13 +866,25 @@ public class ClientThread extends Thread {
                         bufferedOutStream.write(r);
                     }
                     bufferedOutStream.flush();
-                    res = String.format("+Saved %s", filePath.substring(BASE_DIR.length()));
+
+                    String stringPath = String.valueOf(path);
+                    res = String.format("+Saved %s", stringPath.substring(BASE_DIR.length()));
                     appendToFile = false;
                 }
                 catch(IOException e){
+                    e.printStackTrace();
                 }
             }
         }
+    }
+
+    private void createNewFile(String fileDir, FileOutputStream fos){
+        try {
+            fos = new FileOutputStream(fileDir);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 
