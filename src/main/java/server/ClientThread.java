@@ -16,7 +16,7 @@ public class ClientThread extends Thread {
     protected Socket socket;
     private  final String BASE_DIR = "src/main/resources/server_files/user_files/";
     private final String USER_FILES = "src/main/resources/client_files/";
-    private static String user = null;
+    private String user = null;
     private static String password = null;
     private boolean loggedIn = false;
     private  boolean pendingDirChange = false;
@@ -577,7 +577,7 @@ public class ClientThread extends Thread {
      * Handles deleting an account
      */
     public void performKillCommand(){
-        if(!loggedIn){
+        if(user == null){
             res = "-Please log in first";
         }
         else if(str.length() > 4){
@@ -596,9 +596,6 @@ public class ClientThread extends Thread {
                 else{
                     res = String.format("-Not deleted because %s does not exist", relDelPath);
                 }
-
-//                res = (fileToDelete.delete()) ? String.format("+%s deleted", relDelPath):
-//                        String.format("-Not deleted because %s does not exist", relDelPath);
             }
             else{
                 res = "ERROR: Invalid Arguments\n" +
@@ -611,7 +608,8 @@ public class ClientThread extends Thread {
      * Handles renaming a file
      */
     public void performNameCommand(){
-        if(!loggedIn){
+        System.out.println(user);
+        if(user == null){
             res = "-Please log in first";
         }
         else if(str.length()>4){
@@ -636,7 +634,7 @@ public class ClientThread extends Thread {
      * Handles the new name that a file shoudl be renamed to
      */
     public void performTOBECommand(){
-        if(!loggedIn){
+        if(user == null){
             res = "-Please log in first";
         }
         else if(str.length()>4){
@@ -669,7 +667,7 @@ public class ClientThread extends Thread {
      * Handles the type of communication that should be use
      */
     public void performTypeCommand(){
-        if(!loggedIn){
+        if(user == null){
             res = "-Please log in first";
         }
         else if(str.length()>4){
