@@ -17,12 +17,24 @@ public class Server {
 
                 try (Socket clientConnection = socket.accept()) {
                     new ClientThread(clientConnection).start();
+//                    ClientThread thread = new ClientThread(clientConnection);
+//                    new Thread(thread).start();
                 } catch (Exception ignored) {
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+
+//        try{
+//            ServerSocket welcomeSocket = new ServerSocket(Connection_Information.PORT_NUMBER);
+//            while(true){
+//                Socket connectionSocket = welcomeSocket.accept();
+//                ClientThread thread = new ClientThread(connectionSocket);
+//                thread.start();
+//            }
+//        }catch(Exception e){
+//        }
     }
 }
 

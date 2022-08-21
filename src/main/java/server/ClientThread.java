@@ -20,6 +20,7 @@ public class ClientThread extends Thread {
     private static String password = null;
     private boolean loggedIn = false;
     private  boolean pendingDirChange = false;
+    private String pendingDirToChangeTo = "";
     private  JSONArray usersAccounts = null;
     private  String selectedAccount = null;
     private  int numAccounts = 0;
@@ -70,10 +71,12 @@ public class ClientThread extends Thread {
             throw new RuntimeException(e);
         }
 
+
     }
 
 
     public synchronized void start(){
+//    public void run(){
         try {
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
@@ -345,6 +348,7 @@ public class ClientThread extends Thread {
                                 res = "!Account valid, logged-in";
 
                                 if(pendingDirChange){
+                                    currDir = pendingDirToChangeTo;
                                     res += String.format("\nChanged working dir to %s", currDir);
                                     pendingDirChange = false;
                                 }
@@ -360,9 +364,6 @@ public class ClientThread extends Thread {
                 }
                 //No user has been specified
                 else{
-                    //Move other code into here, would need to modify is slightly since some it gets
-                    // taken care in the previous part
-
                     try(FileReader reader = new FileReader("src/main/resources/server_files/db.json")){
                         Object obj = parser.parse(reader);
                         JSONArray list = (JSONArray) obj;
@@ -418,6 +419,7 @@ public class ClientThread extends Thread {
                     loggedIn = true;
                     res = "! Logged in";
                     if(pendingDirChange){
+                        currDir = pendingDirToChangeTo;
                         res += String.format("\nChanged working dir to %s", currDir);
                         pendingDirChange = false;
                     }
@@ -523,7 +525,7 @@ public class ClientThread extends Thread {
      * Handle changing the directory command input
      */
     public void performCDIRCommand(){
-        if(!loggedIn){
+        if(user == null){
             res = "-Please log in first";
         }
         else if(str.length()>4){
@@ -532,15 +534,29 @@ public class ClientThread extends Thread {
             String dir = str.substring(5);
 
             if(isValidInput(dir)){
+
+                if(dir.equals("/")){
+                    currDir = user +"/";
+                    res = String.format("!Changed working dir to %s", currDir);
+                    return;
+                }
+
                 String chkDir = currDir;
                 chkDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
 
+
                 if(isAFolder(dir)){
                     if(Files.exists(Path.of(BASE_DIR+chkDir))){
-                        currDir = chkDir;
-                        res = (loggedIn) ? String.format("!Changed working dir to %s", currDir) :
-                                            "+Directory exists, send account/password";
-                        pendingDirChange = true;
+
+                        if(loggedIn){
+                            currDir = chkDir;
+                            res =String.format("!Changed working dir to %s", currDir);
+                        }
+                        else{
+                            pendingDirChange = true;
+                            pendingDirToChangeTo = chkDir;
+                            res =  "+Directory exists, send account/password";
+                        }
                     }
                     else{
                         res = String.format("-Cant connect to directory because: %s does not exist", chkDir);
@@ -574,7 +590,7 @@ public class ClientThread extends Thread {
                 File fileToDelete = new File(deleteDir);
 
                 if(Files.exists(Path.of(deleteDir))){
-                    fileToDelete.delete(); //TODO: not deleting the file for some reason
+                    fileToDelete.delete();
                     res = String.format("+%s deleted", relDelPath);
                 }
                 else{
