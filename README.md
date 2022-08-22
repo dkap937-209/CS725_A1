@@ -19,14 +19,42 @@ Although this implementation is designed to be cross-platform, and will work on 
 1. Open the project in IntelliJ
 2. Run the ```main``` function in ```src/main/java/client/Client.java```
 
+Once a client has connected to the server, commands can be sent and the server will respond accordingly.
 
-## Test cases
+The user-id, their associated accounts and passwords are shown below. Please note that users 1-5 are used in the test script and the contents of their respective folders are not to be changed.
+
+ User-id |Account|Password
+:-------:|:---:|:---:
+  user1  | |
+  user2  |acct1|
+  user3  | |pass3
+  user4  |acct1|pass4
+  user5  |acct1 acct2 acct3|pass5
+|  user6  |acct1 acct2 acct3 acct4|pass6|
+
+## Features
+
+- Every command from the RFC 913 command has been successfully implemented and thoroughly tested
+- The server fully supports multithreaded socket connections, each client connection will run on a unique thread
+- Each user is assigned a unique folder on the server which they are locked to
+- Relative and absolute filepaths are supported, the user's folder is translated as the root directory
+
+
+##Testing Setup
+
+1. Ensure the server is running
+2. Open a new command prompt
+3. Change directory to the ``src/main/java``` directory in the file explorer
+4. Click on ```test.sh``` to execute the test
+5. The client will execute the test cases shown below
+6. The results of the test script will be stored in ```src/main/java/results.txt```
+
+The output of the test script is shown below. Each command is tested thoroughly and has multiple 
+test cases associated with it in order to ensure the command is working as intended.
 
 _Note: All test cases have been included in ```test.sh```,
 although test requiring file transfer will not work properly.
 Those test can be done manually_
-
-When running ```test.sh``` the output of the test can be found in ```src/main/java/results.txt```
 
 ### Test 1
 ```terminal 

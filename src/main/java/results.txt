@@ -150,7 +150,6 @@ Successfully connected to localhost on port 6789
 delete.txt
 file.txt
 file2.txt
-file3.txt
 rename.txt
 temp
 user1.jpg
@@ -180,7 +179,6 @@ Successfully connected to localhost on port 6789
 Name: delete.txt Path: user1/delete.txt Size: 16 Bytes
 Name: file.txt Path: user1/file.txt Size: 30 Bytes
 Name: file2.txt Path: user1/file2.txt Size: 14 Bytes
-Name: file3.txt Path: user1/file3.txt Size: 31 Bytes
 Name: rename.txt Path: user1/rename.txt Size: 16 Bytes
 Name: temp Path: user1/temp Size: 17928 Bytes
 Name: user1.jpg Path: user1/user1.jpg Size: 0 Bytes
@@ -280,9 +278,10 @@ Successfully connected to localhost on port 6789
 >user user2
 +User-id valid, send account and password
 >cdir temp
--Please log in first
++Directory exists, send account/password
 >acct acct1
 !Account valid, logged-in
+Changed working dir to user2/temp
 >done
 +Closing connection
 
@@ -292,9 +291,10 @@ Successfully connected to localhost on port 6789
 >user user3
 +User-id valid, send account and password
 >cdir temp
--Please log in first
++Directory exists, send account/password
 >pass pass3
 ! Logged in
+Changed working dir to user3/temp
 >done
 +Closing connection
 
@@ -304,11 +304,12 @@ Successfully connected to localhost on port 6789
 >user user4
 +User-id valid, send account and password
 >cdir temp
--Please log in first
++Directory exists, send account/password
 >acct acct1
 +Account valid, send password
 >pass pass4
 ! Logged in
+Changed working dir to user4/temp
 >done
 +Closing connection
 
@@ -476,7 +477,7 @@ ERROR: Invalid Arguments
 Usage: SEND
 >stop stop
 ERROR: Invalid Arguments
-Usage: STOP
+ Usage: STOP
 >done
 +Closing connection
 
@@ -489,9 +490,6 @@ Successfully connected to localhost on port 6789
 +File does not exist, will create new file
 >size 28
 
->done
-+Closing connection
-
 Test 44
 Successfully connected to localhost on port 6789
 +RFC 913 SFTP Server
@@ -501,4 +499,99 @@ Successfully connected to localhost on port 6789
 +File exists, will create new generation of file
 >size 31
 
+Test 45
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor old fromClient.txt
++Will write over old file
+>size 28
+
+Test 46
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor old file2.txt
++Will write over old file
+>size 31
+
+Test 47
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor app fromClient.txt
++Will append to file
+>size 28
+
+Test 48
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor app file2.txt
++Will append to file
+>size 31
+
+Test 49
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor new fake.txt
+ERROR: File doesn't exist
 >done
++Closing connection
+
+Test 50
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor new client
+ERROR: Specifier is not a file
+>done
++Closing connection
+
+Test 51
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>user user1
+!user1 logged in
+>stor app file2.txt file2.txt
+ERROR: Invalid Arguments
+Usage: STOR { NEW | OLD | APP } file-spec
+>stor a
+ERROR: Invalid Arguments
+Usage: STOR { NEW | OLD | APP } file-spec
+>stor app file2.txt
++Will append to file
+>size 31 31
+ERROR: Invalid Arguments
+Usage: SIZE number-of-bytes-in-file
+>done
++Closing connection
+
+Test 52
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>type a
+-Please log in first
+>list f
+-Please log in first
+>name rename.txt
+-Please log in first
+>done
++Closing connection
+
+Test 53
+Successfully connected to localhost on port 6789
++RFC 913 SFTP Server
+>unknown
+ERROR: Invalid Command
+Available Commands: "USER", "ACCT", "PASS", "TYPE", "LIST", "CDIR", "KILL", "NAME", "TOBE", "DONE", "RETR", "SEND", "STOP", "STOR", "SIZE"
+>done
++Closing connection
+

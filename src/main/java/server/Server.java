@@ -10,31 +10,29 @@ import java.net.Socket;
 public class Server {
     public static void main(String[] args) {
 
-        while (true) {
-            try (ServerSocket socket = new ServerSocket(Connection_Information.PORT_NUMBER)) {
-                InetAddress serverHost = InetAddress.getLocalHost();
-                System.out.println("Server destination: " + serverHost.getHostAddress() + ":" + socket.getLocalPort());
+        ServerSocket server = null;
 
-                try (Socket clientConnection = socket.accept()) {
-                    new ClientThread(clientConnection).start();
-//                    ClientThread thread = new ClientThread(clientConnection);
-//                    new Thread(thread).start();
-                } catch (Exception ignored) {
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        try {
+            server = new ServerSocket(6789);
+            server.setReuseAddress(true);
+
+
+            while(true){
+                Socket client = server.accept();
+                System.out.println("New client connected: "
+                        + client.getInetAddress()
+                        .getHostAddress());
+
+                ClientThread clientSock
+                        = new ClientThread(client);
+
+                // This thread will handle the client
+                // separately
+                new Thread(clientSock).start();
             }
-        }
 
-//        try{
-//            ServerSocket welcomeSocket = new ServerSocket(Connection_Information.PORT_NUMBER);
-//            while(true){
-//                Socket connectionSocket = welcomeSocket.accept();
-//                ClientThread thread = new ClientThread(connectionSocket);
-//                thread.start();
-//            }
-//        }catch(Exception e){
-//        }
+        }catch(IOException e){}
+
     }
 }
 

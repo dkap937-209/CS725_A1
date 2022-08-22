@@ -11,8 +11,8 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class ClientThread extends Thread {
-//public class ClientThread implements Runnable {
+
+public class ClientThread implements Runnable {
     protected Socket socket;
     private  final String BASE_DIR = "src/main/resources/server_files/user_files/";
     private final String USER_FILES = "src/main/resources/client_files/";
@@ -74,9 +74,7 @@ public class ClientThread extends Thread {
 
     }
 
-
-    public synchronized void start(){
-//    public void run(){
+    public void run(){
         try {
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
@@ -535,36 +533,66 @@ public class ClientThread extends Thread {
 
             if(isValidInput(dir)){
 
-                if(dir.equals("/")){
+                System.out.println(currDir);
+                System.out.println(dir);
+
+                if(dir.startsWith(user)){
+                    if(isAFolder(dir)){
+                        if(Files.exists(Path.of(BASE_DIR+dir))){
+
+                            if(loggedIn){
+                                currDir = dir;
+                                res =String.format("!Changed working dir to %s", currDir);
+                            }
+                            else{
+                                pendingDirChange = true;
+                                pendingDirToChangeTo = dir;
+                                res =  "+Directory exists, send account/password";
+                            }
+                        }
+                        else{
+                            res = String.format("-Cant connect to directory because: %s does not exist", dir);
+                        }
+                    }
+                    else{
+                        res = String.format("-Cant list directory because: %s is not a directory", dir);
+                    }
+
+
+                }
+                else if(dir.equals("/")){
                     currDir = user +"/";
                     res = String.format("!Changed working dir to %s", currDir);
                     return;
                 }
+                else{
+                    String chkDir = currDir;
+                    chkDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
 
-                String chkDir = currDir;
-                chkDir +=  (dir.startsWith("/") || currDir.endsWith("/") || dir.equals("/"))? dir : ("/"+dir);
 
+                    if(isAFolder(dir)){
+                        if(Files.exists(Path.of(BASE_DIR+chkDir))){
 
-                if(isAFolder(dir)){
-                    if(Files.exists(Path.of(BASE_DIR+chkDir))){
-
-                        if(loggedIn){
-                            currDir = chkDir;
-                            res =String.format("!Changed working dir to %s", currDir);
+                            if(loggedIn){
+                                currDir = chkDir;
+                                res =String.format("!Changed working dir to %s", currDir);
+                            }
+                            else{
+                                pendingDirChange = true;
+                                pendingDirToChangeTo = chkDir;
+                                res =  "+Directory exists, send account/password";
+                            }
                         }
                         else{
-                            pendingDirChange = true;
-                            pendingDirToChangeTo = chkDir;
-                            res =  "+Directory exists, send account/password";
+                            res = String.format("-Cant connect to directory because: %s does not exist", chkDir);
                         }
                     }
                     else{
-                        res = String.format("-Cant connect to directory because: %s does not exist", chkDir);
+                        res = String.format("-Cant list directory because: %s is not a directory", chkDir);
                     }
                 }
-                else{
-                    res = String.format("-Cant list directory because: %s is not a directory", chkDir);
-                }
+
+
             }
             else{
                 res = "ERROR: Invalid Arguments\n" +
