@@ -170,7 +170,7 @@ echo "">> results.txt
 
 echo "Test 34"
 echo "Test 34" >> results.txt
-{ echo "user user1";  echo "tobe file2.txt"; echo "done";} | java client/Client.java >> results.txt
+{ echo "user user1";  echo "name file.txt" echo "tobe file2.txt"; echo "done";} | java client/Client.java >> results.txt
 echo "">> results.txt
 
 echo "Test 35"

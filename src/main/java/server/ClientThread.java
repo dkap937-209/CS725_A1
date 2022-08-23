@@ -55,17 +55,22 @@ public class ClientThread implements Runnable {
             fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/delete.txt");
             fos.write(delteFileData.getBytes());
             fos.flush();
+            fos.close();
 
             fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/rename.txt");
             fos.write(renameFileData.getBytes());
             fos.flush();
+            fos.close();
 
             fos = new FileOutputStream("src/main/resources/server_files/user_files/user1/file2.txt");
             fos.write(file2txt.getBytes());
             fos.flush();
+            fos.close();
 
             File file = new File("src/main/resources/server_files/user_files/user1/fromClient.txt");
             file.delete();
+
+            fos.close();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -605,7 +610,7 @@ public class ClientThread implements Runnable {
      * Handles deleting an account
      */
     public void performKillCommand(){
-        if(user == null){
+        if(!loggedIn){
             res = "-Please log in first";
         }
         else if(str.length() > 4){
@@ -615,10 +620,13 @@ public class ClientThread implements Runnable {
             if(isValidInput(fileName)){
                 String relDelPath = String.format("%s/%s", currDir, fileName);
                 String deleteDir = String.format("%s%s", BASE_DIR, relDelPath);
-                File fileToDelete = new File(deleteDir);
 
                 if(Files.exists(Path.of(deleteDir))){
-                    fileToDelete.delete();
+                    try {
+                        Files.delete(Path.of(deleteDir));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     res = String.format("+%s deleted", relDelPath);
                 }
                 else{
@@ -636,8 +644,7 @@ public class ClientThread implements Runnable {
      * Handles renaming a file
      */
     public void performNameCommand(){
-        System.out.println(user);
-        if(user == null){
+        if(!loggedIn){
             res = "-Please log in first";
         }
         else if(str.length()>4){
@@ -662,14 +669,15 @@ public class ClientThread implements Runnable {
      * Handles the new name that a file shoudl be renamed to
      */
     public void performTOBECommand(){
-        if(user == null){
+        System.out.println("Called here");
+        /*if(!loggedIn){
             res = "-Please log in first";
         }
-        else if(str.length()>4){
+        else */if(str.length()>4){
             String newFileName = str.substring(5);
 
             if(isValidInput(newFileName)){
-                File file = new File(filePath);
+                System.out.println("Is valid");
                 String newFilePathName = String.format("%s/%s", currDir, newFileName);
                 String newPath = String.format("%s%s", BASE_DIR, newFilePathName);
 
@@ -677,7 +685,15 @@ public class ClientThread implements Runnable {
                     //A file with the same name already exist
                     res = String.format("File wasn't renamed because %s already exists", newFilePathName);
                 }
-                else if(file.renameTo(new File(newPath))){
+                else {
+
+                    try {
+                        Files.move(Path.of(filePath),
+                                Path.of(filePath).resolveSibling(newFileName));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
                     res = String.format("%s renamed to %s", renamePath, newFilePathName);
                 }
             }
@@ -695,7 +711,7 @@ public class ClientThread implements Runnable {
      * Handles the type of communication that should be use
      */
     public void performTypeCommand(){
-        if(user == null){
+        if(!loggedIn){
             res = "-Please log in first";
         }
         else if(str.length()>4){
@@ -728,7 +744,10 @@ public class ClientThread implements Runnable {
      */
     private void performRetrieveCommand() {
 
-        if(str.length() > 4){
+        if(!loggedIn){
+            res = "-Please log in first";
+        }
+        else if(str.length() > 4){
 
             String fileToRetrieve = str.substring(5);
 
@@ -758,7 +777,10 @@ public class ClientThread implements Runnable {
      */
     private void performStoreCommand() {
 
-        if(str.length()>4){
+        if(!loggedIn){
+            res = "-Please log in first";
+        }
+        else if(str.length()>4){
 
             try{
                 //Get what type of GEN the file should be and check it is valid

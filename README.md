@@ -240,6 +240,7 @@ Successfully connected to localhost on port 6789
 delete.txt
 file.txt
 file2.txt
+file3.txt
 rename.txt
 temp
 user1.jpg
@@ -271,8 +272,9 @@ Successfully connected to localhost on port 6789
 >list v
 +user1/
 Name: delete.txt Path: user1/delete.txt Size: 16 Bytes
-Name: file.txt Path: user1/file.txt Size: 14 Bytes
+Name: file.txt Path: user1/file.txt Size: 30 Bytes
 Name: file2.txt Path: user1/file2.txt Size: 14 Bytes
+Name: file3.txt Path: user1/file3.txt Size: 31 Bytes
 Name: rename.txt Path: user1/rename.txt Size: 16 Bytes
 Name: temp Path: user1/temp Size: 17928 Bytes
 Name: user1.jpg Path: user1/user1.jpg Size: 0 Bytes
